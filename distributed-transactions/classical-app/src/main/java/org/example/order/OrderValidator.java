@@ -1,27 +1,26 @@
 package org.example.order;
 
-import org.example.customer.Customer;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class OrderValidator {
 
-    public void validateNew(Order order, Optional<Customer> c) {
+    public void validateNew(Order order) {
         OrderNotValidException e = new OrderNotValidException();
 
         if(order.getId() != null) {
-            e.add(new OrderNotValidException.Detail("ID Cannot have value"));
+            e.add(new OrderNotValidException.Detail("id", "ID Cannot have value"));
+        }
+
+        if(order.getCustomerId() == null) {
+            e.add(new OrderNotValidException.Detail("customerId", "Customer ID cannot be null"));
         }
 
         if(order.getAmount() == null) {
-            e.add(new OrderNotValidException.Detail("Amount should have an numeric value"));
+            e.add(new OrderNotValidException.Detail("amount", "Amount should have an numeric value"));
+        } else if(order.getAmount() < 0) {
+            e.add(new OrderNotValidException.Detail("amount", "Amount cannot have negative value"));
         }
-
-        c.ifPresentOrElse(
-                customer -> {},
-                () -> e.add(new OrderNotValidException.Detail("Customer ID is not valid")));
 
         if(e.hasIssues()) {
             throw e;

@@ -1,7 +1,9 @@
 package org.example.api.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.order.Order;
 import org.example.order.OrderStatus;
 
@@ -10,17 +12,21 @@ import java.util.UUID;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO {
 
     private UUID id;
 
-    private String customerId;
+    private UUID customerId;
 
     private Long amount;
     private OrderStatus status;
 
     private LocalDateTime created;
     private LocalDateTime placed;
+    private LocalDateTime failed;
+    private String message;
 
     public static OrderDTO fromEntity(Order order) {
         return OrderDTO.builder()
@@ -30,6 +36,8 @@ public class OrderDTO {
                 .status(order.getStatus())
                 .created(order.getCreated())
                 .placed(order.getPlaced())
+                .failed(order.getFailed())
+                .message(order.getMessage())
                 .build();
     }
 
@@ -41,6 +49,8 @@ public class OrderDTO {
                 .status(status)
                 .created(created)
                 .placed(placed)
+                .failed(failed)
+                .message(message)
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package org.example.customer;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +12,9 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer {
 
     @Id
@@ -24,5 +26,7 @@ public class Customer {
     String lastName;
 
     LocalDateTime created;
+
+    Long budget;
 
 }
