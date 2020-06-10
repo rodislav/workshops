@@ -50,7 +50,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         var e = new OrderNotValidException();
 
-        if(ex.getCause() != null && ex.getCause() instanceof InvalidFormatException) {
+        if (ex.getCause() != null && ex.getCause() instanceof InvalidFormatException) {
             var iex = (InvalidFormatException) ex.getCause();
             var fieldPath = iex.getPathReference().replace(getClass().getPackageName() + ".", "");
             e.add(new OrderNotValidException.Detail(fieldPath, iex.getOriginalMessage()));

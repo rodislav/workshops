@@ -1,46 +1,48 @@
 package org.example.api;
 
+import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.CustomerDTO;
-import org.example.customer.Customer;
+import org.example.api.dto.CustomerMapper;
+import org.example.customer.CustomerNotFoundException;
 import org.example.customer.CustomerService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import static org.example.api.dto.CustomerDTO.fromEntity;
-
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerMapper mapper;
 
     @GetMapping
-    public List<CustomerDTO> get() {
-        var result = new ArrayList<CustomerDTO>();
-        customerService.findAll()
-                .forEach(order -> result.add(fromEntity(order)));
-
-        return result;
+    public Seq<CustomerDTO> list() {
+        return customerService.findAll()
+                .map(mapper::fromEntity);
     }
 
     @GetMapping("{id}")
-    public CustomerDTO get(UUID id) {
-        var customer = customerService.findById(id);
-
-        return fromEntity(customer);
+    public CustomerDTO get(@PathVariable UUID id) {
+        return customerService.findById(id)
+                .map(mapper::fromEntity)
+                .getOrElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    @PostMapping()
-    public void placeOrder(@RequestBody CustomerDTO dto, HttpServletResponse response) {
-        var uuid = customerService.createCustomer(dto.toEntity());
-        response.addHeader(HttpHeaders.LOCATION, "/customer/" + uuid.toString());
+    @PostMapping
+    public CustomerDTO create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
+        return customerService.createCustomer(mapper.toEntity(dto))
+                .peek(c -> {
+                    response.addHeader(HttpHeaders.LOCATION, "/customers/" + c.getId().toString());
+                    response.setStatus(HttpStatus.CREATED.value());
+                })
+                .map(mapper::fromEntity)
+                .get();
     }
 
 }

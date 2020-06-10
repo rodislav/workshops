@@ -12,37 +12,25 @@ import java.util.List;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 @JsonIgnoreProperties(value = {"suppressed", "localizedMessage", "stackTrace", "cause"})
 public class OrderNotValidException extends RuntimeException {
+    @Getter
+    private List<Detail> details = new ArrayList<>();
 
     public OrderNotValidException() {
         super("Provided order is not valid, please check details.");
     }
 
-    @Getter
-    private List<Detail> details;
-
     public void add(Detail d) {
-        if(details == null) {
-            details = new ArrayList<>();
-        }
-
         details.add(d);
     }
 
     public boolean hasIssues() {
-        return details != null && details.size() > 0;
+        return !details.isEmpty();
     }
 
-    @AllArgsConstructor
     @Getter
+    @AllArgsConstructor
     public static class Detail {
         private String field;
         private String message;
-
-        @Override
-        public String toString() {
-            return "{" +
-                    "'message': '" + message + '\'' +
-                    '}';
-        }
     }
 }

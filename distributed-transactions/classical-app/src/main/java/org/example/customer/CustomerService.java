@@ -1,7 +1,9 @@
 package org.example.customer;
 
+import io.vavr.collection.Seq;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,36 +15,31 @@ public class CustomerService {
 
     private final CustomerRepository repository;
 
-    public Customer findById(UUID customerId) {
-        return repository
-                .findById(customerId)
-                .orElseThrow(() -> new CustomerNotFoundException(customerId));
+    public Option<Customer> findById(UUID customerId) {
+        return repository.getById(customerId);
     }
 
-    public void debitBudget(Customer customer, Long amount) {
-        customer.setBudget(customer.getBudget() - Math.abs(amount));
-
-        if(customer.getBudget() < 0) {
+    public Customer debitBudget(Customer customer, Long amount) {
+        long newBudget = customer.getBudget() - Math.abs(amount);
+        if (newBudget < 0) {
             throw new InsufficientFundsException();
         }
 
-        repository.save(customer);
+        return repository.save(customer.setBudget(newBudget));
     }
 
     public void creditBudget(UUID customerId, Long amount) {
-        var customer = findById(customerId);
-        customer.setBudget(customer.getBudget() + Math.abs(amount));
-        repository.save(customer);
+        findById(customerId)
+                .map(c -> c.setBudget(c.getBudget() + Math.abs(amount)))
+                .peek(repository::save);
     }
 
-    public Iterable<Customer> findAll() {
+    public Seq<Customer> findAll() {
         return repository.findAll();
     }
 
-    public UUID createCustomer(Customer customer) {
-        customer.setCreated(LocalDateTime.now());
-        return repository
-                .save(customer)
-                .getId();
+    public Try<Customer> createCustomer(Customer customer) {
+        return Try.of(() -> repository
+                .save(customer.setCreated(LocalDateTime.now())));
     }
 }

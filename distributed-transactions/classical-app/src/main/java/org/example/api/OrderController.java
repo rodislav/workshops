@@ -1,48 +1,49 @@
 package org.example.api;
 
+import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.OrderDTO;
-import org.example.order.Order;
+import org.example.api.dto.OrderMapper;
 import org.example.order.OrderFacade;
+import org.example.order.OrderNotFoundException;
 import org.example.order.OrderService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import static org.example.api.dto.OrderDTO.fromEntity;
-
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
-
     private final OrderService orderService;
     private final OrderFacade orderFacade;
+    private final OrderMapper mapper;
 
     @GetMapping
-    public List<OrderDTO> get() {
-        var result = new ArrayList<OrderDTO>();
-        orderService.findAll()
-                .forEach(order -> result.add(fromEntity(order)));
-
-        return result;
+    public Seq<OrderDTO> list() {
+        return orderService.findAll()
+                .map(mapper::fromEntity);
     }
 
     @GetMapping("{id}")
-    public OrderDTO get(UUID id) {
-        var order = orderService.findById(id);
-
-        return fromEntity(order);
+    public OrderDTO get(@PathVariable UUID id) {
+        return orderService.findById(id)
+                .map(mapper::fromEntity)
+                .getOrElseThrow(() -> new OrderNotFoundException(id));
     }
 
-    @PostMapping()
-    public void place(@RequestBody OrderDTO order, HttpServletResponse response) {
-        var uuid = orderFacade.placeOrder(order.toEntity());
-        response.addHeader(HttpHeaders.LOCATION, "/order/" + uuid.toString());
+    @PostMapping
+    public OrderDTO place(@RequestBody OrderDTO order, HttpServletResponse response) {
+        return orderFacade.placeOrder(mapper.toEntity(order))
+                .peek(o -> {
+                    response.setStatus(HttpStatus.CREATED.value());
+                    response.addHeader(HttpHeaders.LOCATION, "/orders/" + o.getId().toString());
+                })
+                .map(mapper::fromEntity)
+                .get();
     }
 
 }
