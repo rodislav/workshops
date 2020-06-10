@@ -13,18 +13,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
-// this is a workaround because:
-// ORDER is a reserved keyword, http://www.h2database.com/html/advanced.html#keywords
-// but SQL allow underscores in table names and prohibits having keywords with underscores, https://stackoverflow.com/a/19758863/1107450
-@Table(name = "ORDER_")
-
+@Table(name = "ORDERS")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private UUID customerId;
 
     private Long amount;
