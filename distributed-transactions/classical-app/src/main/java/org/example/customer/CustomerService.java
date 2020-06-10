@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     public void creditBudget(UUID customerId, Long amount) {
-        final Customer customer = findById(customerId);
+        var customer = findById(customerId);
         customer.setBudget(customer.getBudget() + Math.abs(amount));
         repository.save(customer);
     }

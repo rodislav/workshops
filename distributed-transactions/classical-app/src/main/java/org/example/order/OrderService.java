@@ -33,6 +33,7 @@ public class OrderService {
         order.setStatus(OrderStatus.FAILED);
         order.setFailed(LocalDateTime.now());
         order.setMessage(message);
+
         return repository.save(order);
     }
 

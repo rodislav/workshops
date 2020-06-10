@@ -25,7 +25,7 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDTO> get() {
-        List<OrderDTO> result = new ArrayList<>();
+        var result = new ArrayList<OrderDTO>();
         orderService.findAll()
                 .forEach(order -> result.add(fromEntity(order)));
 
@@ -34,14 +34,14 @@ public class OrderController {
 
     @GetMapping("{id}")
     public OrderDTO get(UUID id) {
-        final Order order = orderService.findById(id);
+        var order = orderService.findById(id);
 
         return fromEntity(order);
     }
 
     @PostMapping()
     public void place(@RequestBody OrderDTO order, HttpServletResponse response) {
-        final UUID uuid = orderFacade.placeOrder(order.toEntity());
+        var uuid = orderFacade.placeOrder(order.toEntity());
         response.addHeader(HttpHeaders.LOCATION, "/order/" + uuid.toString());
     }
 

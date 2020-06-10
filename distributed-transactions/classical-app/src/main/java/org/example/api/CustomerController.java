@@ -23,7 +23,7 @@ public class CustomerController {
 
     @GetMapping
     public List<CustomerDTO> get() {
-        List<CustomerDTO> result = new ArrayList<>();
+        var result = new ArrayList<CustomerDTO>();
         customerService.findAll()
                 .forEach(order -> result.add(fromEntity(order)));
 
@@ -32,14 +32,14 @@ public class CustomerController {
 
     @GetMapping("{id}")
     public CustomerDTO get(UUID id) {
-        final Customer customer = customerService.findById(id);
+        var customer = customerService.findById(id);
 
         return fromEntity(customer);
     }
 
     @PostMapping()
     public void placeOrder(@RequestBody CustomerDTO dto, HttpServletResponse response) {
-        final UUID uuid = customerService.createCustomer(dto.toEntity());
+        var uuid = customerService.createCustomer(dto.toEntity());
         response.addHeader(HttpHeaders.LOCATION, "/customer/" + uuid.toString());
     }
 

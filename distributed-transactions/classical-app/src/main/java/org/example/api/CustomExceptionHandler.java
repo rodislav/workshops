@@ -22,7 +22,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = InsufficientFundsException.class)
     protected ResponseEntity<Object> handleOrderNotValidException(InsufficientFundsException ex, WebRequest request) {
-        final ResponseStatus annotation = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
+        var annotation = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
 
         return handleExceptionInternal(
                 ex,
@@ -35,7 +35,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = OrderNotValidException.class)
     protected ResponseEntity<Object> handleOrderNotValidException(OrderNotValidException ex, WebRequest request) {
-        final ResponseStatus annotation = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
+        var annotation = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
 
         return handleExceptionInternal(
                 ex,
@@ -48,10 +48,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        OrderNotValidException e = new OrderNotValidException();
+        var e = new OrderNotValidException();
+
         if(ex.getCause() != null && ex.getCause() instanceof InvalidFormatException) {
-            InvalidFormatException iex = (InvalidFormatException) ex.getCause();
-            String fieldPath = iex.getPathReference().replace(getClass().getPackageName() + ".", "");
+            var iex = (InvalidFormatException) ex.getCause();
+            var fieldPath = iex.getPathReference().replace(getClass().getPackageName() + ".", "");
             e.add(new OrderNotValidException.Detail(fieldPath, iex.getOriginalMessage()));
         } else {
             e.add(new OrderNotValidException.Detail("[unknown]", ex.getMessage()));

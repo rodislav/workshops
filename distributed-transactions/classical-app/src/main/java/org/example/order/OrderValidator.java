@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class OrderValidator {
 
     public void validateNew(Order order) {
-        OrderNotValidException e = new OrderNotValidException();
+        var e = new OrderNotValidException();
 
         if(order.getId() != null) {
             e.add(new OrderNotValidException.Detail("id", "ID Cannot have value"));

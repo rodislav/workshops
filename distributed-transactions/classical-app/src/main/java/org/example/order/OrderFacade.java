@@ -9,7 +9,6 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Slf4j
@@ -22,32 +21,24 @@ public class OrderFacade {
     private final OrderService orderService;
 
     public UUID placeOrder(Order order) {
-        AtomicReference<Boolean> amountDebited = new AtomicReference<>(false);
         try {
             return transactionTemplate.execute(status -> {
                 orderValidator.validateNew(order);
 
-                final Customer customer = customerService.findById(order.getCustomerId());
+                var customer = customerService.findById(order.getCustomerId());
 
-                Order newOrder = orderService.createOrder(order);
+                var newOrder = orderService.createOrder(order);
                 customerService.debitBudget(customer, newOrder.getAmount());
-                amountDebited.set(true);
 
                 newOrder = orderService.placeOrder(order);
 
                 return newOrder.getId();
             });
         } catch (TransactionException e) {
-            Order newOrder = orderService.markAsFailed(order, e.getMessage());
-
-            if(amountDebited.get()) {
-                customerService.creditBudget(order.getCustomerId(), order.getAmount());
-            }
-
-            log.error("Failed to place an order, order: {}", newOrder);
+            log.error("Failed to place an order, order: {}", order);
+            throw new OrderPlacementException(order, e);
         }
 
-        throw new OrderPlacementException(order);
     }
 
 }
