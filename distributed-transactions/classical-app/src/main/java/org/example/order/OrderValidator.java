@@ -27,4 +27,8 @@ public class OrderValidator {
         }
     }
 
+    public OrderNotValidException unknownCustomer() {
+        var detail = new OrderNotValidException.Detail("customerId", "Unknown customer.");
+        return new OrderNotValidException(detail);
+    }
 }

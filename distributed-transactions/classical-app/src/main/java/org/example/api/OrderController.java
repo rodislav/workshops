@@ -4,8 +4,8 @@ import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.OrderDTO;
 import org.example.api.dto.OrderMapper;
+import org.example.api.exception.OrderNotFoundException;
 import org.example.order.OrderFacade;
-import org.example.order.OrderNotFoundException;
 import org.example.order.OrderService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,13 +36,10 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderDTO place(@RequestBody OrderDTO order, HttpServletResponse response) {
-        return orderFacade.placeOrder(mapper.toEntity(order))
-                .peek(o -> {
-                    response.setStatus(HttpStatus.CREATED.value());
-                    response.addHeader(HttpHeaders.LOCATION, "/orders/" + o.getId().toString());
-                })
-                .map(mapper::fromEntity)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void place(@RequestBody OrderDTO order, HttpServletResponse response) {
+        orderFacade.placeOrder(mapper.toEntity(order))
+                .peek(o -> response.addHeader(HttpHeaders.LOCATION, "/orders/" + o.getId()))
                 .get();
     }
 

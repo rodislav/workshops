@@ -28,12 +28,6 @@ public class CustomerService {
         return repository.save(customer.setBudget(newBudget));
     }
 
-    public void creditBudget(UUID customerId, Long amount) {
-        findById(customerId)
-                .map(c -> c.setBudget(c.getBudget() + Math.abs(amount)))
-                .peek(repository::save);
-    }
-
     public Seq<Customer> findAll() {
         return repository.findAll();
     }

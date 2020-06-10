@@ -4,7 +4,7 @@ import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.CustomerDTO;
 import org.example.api.dto.CustomerMapper;
-import org.example.customer.CustomerNotFoundException;
+import org.example.api.exception.CustomerNotFoundException;
 import org.example.customer.CustomerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,24 +24,21 @@ public class CustomerController {
     @GetMapping
     public Seq<CustomerDTO> list() {
         return customerService.findAll()
-                .map(mapper::fromEntity);
+                .map(mapper::toDto);
     }
 
     @GetMapping("{id}")
     public CustomerDTO get(@PathVariable UUID id) {
         return customerService.findById(id)
-                .map(mapper::fromEntity)
+                .map(mapper::toDto)
                 .getOrElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     @PostMapping
-    public CustomerDTO create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
-        return customerService.createCustomer(mapper.toEntity(dto))
-                .peek(c -> {
-                    response.addHeader(HttpHeaders.LOCATION, "/customers/" + c.getId().toString());
-                    response.setStatus(HttpStatus.CREATED.value());
-                })
-                .map(mapper::fromEntity)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
+        customerService.createCustomer(mapper.toEntity(dto))
+                .peek(c -> response.addHeader(HttpHeaders.LOCATION, "/customers/" + c.getId()))
                 .get();
     }
 

@@ -17,6 +17,10 @@ public class OrderService {
         return repository.getById(id);
     }
 
+    public Seq<Order> findAll() {
+        return repository.findAll();
+    }
+
     public Order createOrder(Order order) {
         order.setStatus(OrderStatus.CREATED);
         order.setCreated(LocalDateTime.now());
@@ -29,17 +33,5 @@ public class OrderService {
         order.setPlaced(LocalDateTime.now());
 
         return repository.save(order);
-    }
-
-    public Order markAsFailed(Order order, String message) {
-        order.setStatus(OrderStatus.FAILED);
-        order.setFailed(LocalDateTime.now());
-        order.setMessage(message);
-
-        return repository.save(order);
-    }
-
-    public Seq<Order> findAll() {
-        return repository.findAll();
     }
 }
