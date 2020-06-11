@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.api.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.example.api.exception.WebException;
