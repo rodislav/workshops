@@ -4,7 +4,7 @@ import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.CustomerDTO;
 import org.example.api.dto.CustomerMapper;
-import org.example.api.exception.CustomerNotFoundException;
+import org.example.api.exception.NotFoundException;
 import org.example.customer.CustomerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,14 +31,15 @@ public class CustomerController {
     public CustomerDTO get(@PathVariable UUID id) {
         return customerService.findById(id)
                 .map(mapper::toDto)
-                .getOrElseThrow(() -> new CustomerNotFoundException(id));
+                .getOrElseThrow(() -> new NotFoundException(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
-        customerService.createCustomer(mapper.toEntity(dto))
+    public CustomerDTO create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
+        return customerService.createCustomer(mapper.toEntity(dto))
                 .peek(c -> response.addHeader(HttpHeaders.LOCATION, "/customers/" + c.getId()))
+                .map(mapper::toDto)
                 .get();
     }
 

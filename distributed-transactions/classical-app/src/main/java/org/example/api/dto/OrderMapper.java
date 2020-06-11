@@ -10,5 +10,5 @@ public interface OrderMapper {
     Order toEntity(OrderDTO dto);
 
     @InheritInverseConfiguration
-    OrderDTO fromEntity(Order entity);
+    OrderDTO toDto(Order entity);
 }

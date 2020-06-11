@@ -4,7 +4,7 @@ import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import org.example.api.dto.OrderDTO;
 import org.example.api.dto.OrderMapper;
-import org.example.api.exception.OrderNotFoundException;
+import org.example.api.exception.NotFoundException;
 import org.example.order.OrderFacade;
 import org.example.order.OrderService;
 import org.springframework.http.HttpHeaders;
@@ -25,21 +25,22 @@ public class OrderController {
     @GetMapping
     public Seq<OrderDTO> list() {
         return orderService.findAll()
-                .map(mapper::fromEntity);
+                .map(mapper::toDto);
     }
 
     @GetMapping("{id}")
     public OrderDTO get(@PathVariable UUID id) {
         return orderService.findById(id)
-                .map(mapper::fromEntity)
-                .getOrElseThrow(() -> new OrderNotFoundException(id));
+                .map(mapper::toDto)
+                .getOrElseThrow(() -> new NotFoundException(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void place(@RequestBody OrderDTO order, HttpServletResponse response) {
-        orderFacade.placeOrder(mapper.toEntity(order))
+    public OrderDTO place(@RequestBody OrderDTO order, HttpServletResponse response) {
+        return orderFacade.placeOrder(mapper.toEntity(order))
                 .peek(o -> response.addHeader(HttpHeaders.LOCATION, "/orders/" + o.getId()))
+                .map(mapper::toDto)
                 .get();
     }
 
