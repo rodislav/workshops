@@ -4,6 +4,7 @@ import org.example.customer.Customer;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
+//https://www.baeldung.com/mapstruct
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 

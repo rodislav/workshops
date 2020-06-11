@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    //https://vladmihalcea.com/uuid-identifier-jpa-hibernate/
     private UUID id;
     private UUID customerId;
 

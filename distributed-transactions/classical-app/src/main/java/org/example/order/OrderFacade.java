@@ -17,6 +17,9 @@ public class OrderFacade {
     private final CustomerService customerService;
     private final OrderService orderService;
 
+    //Programmatic transaction management
+    //https://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch11s06.html
+    //https://www.baeldung.com/spring-programmatic-transaction-management
     public Try<Order> placeOrder(Order order) {
         return Try
                 .of(() -> transactionTemplate.execute(status -> {

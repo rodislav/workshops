@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+//https://www.baeldung.com/jackson-ignore-null-fields
 public class OrderDTO {
     private UUID id;
     private UUID customerId;

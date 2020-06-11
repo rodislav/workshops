@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+//https://www.baeldung.com/jackson-ignore-null-fields
 public class CustomerDTO {
     String firstName;
     String lastName;

@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+//https://www.baeldung.com/exception-handling-for-rest-with-spring
+// https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 

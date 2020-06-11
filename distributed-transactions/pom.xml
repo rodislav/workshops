@@ -24,6 +24,8 @@
         <module>saga</module>
     </modules>
 
+<!--    Using Spring Boot without the Parent POM -->
+<!--    https://docs.spring.io/spring-boot/docs/2.3.0.RELEASE/maven-plugin/reference/html/#using-import-->
     <dependencyManagement>
         <dependencies>
             <dependency>

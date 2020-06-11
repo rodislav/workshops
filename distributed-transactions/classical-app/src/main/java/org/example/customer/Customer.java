@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name = "CUSTOMERS")
+//https://vladmihalcea.com/uuid-identifier-jpa-hibernate/
 public class Customer {
     String firstName;
     String lastName;

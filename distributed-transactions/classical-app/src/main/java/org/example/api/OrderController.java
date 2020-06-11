@@ -35,6 +35,7 @@ public class OrderController {
                 .getOrElseThrow(() -> new NotFoundException(id));
     }
 
+    //https://www.baeldung.com/spring-response-header
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDTO place(@RequestBody OrderDTO order, HttpServletResponse response) {
