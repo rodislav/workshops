@@ -26,7 +26,7 @@ public class OrderFacade {
 
                     return customerService.findById(order.getCustomerId())
                             .map(c -> customerService.debitBudget(c, newOrder.getAmount()))
-                            .map(c -> orderService.placeOrder(order))
+                            .map(c -> orderService.placeOrder(newOrder))
                             .getOrElseThrow(orderValidator::unknownCustomer);
 
                 }))

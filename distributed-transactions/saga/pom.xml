@@ -13,4 +13,10 @@
     <artifactId>saga</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>customer-service</module>
+        <module>order-service</module>
+        <module>coordinator</module>
+    </modules>
+
 </project>
