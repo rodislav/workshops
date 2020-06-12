@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>saga</artifactId>
-        <groupId>org.example</groupId>
+        <groupId>org.example.saga</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
