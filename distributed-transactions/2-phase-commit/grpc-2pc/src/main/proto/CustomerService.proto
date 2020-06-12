@@ -1,0 +1,18 @@
+option java_package = "org.example.order.generated.grpc";
+
+message CustomerDebitRPC {
+  required string customerId = 1;
+  required int64 amount = 2;
+}
+
+message CustomerRPC {
+  required string id = 1;
+  required string firstName = 2;
+  required string lastName = 3;
+  required string created = 4;
+}
+
+service CustomerService {
+  rpc DebitCustomer(CustomerDebitRPC) returns (CustomerRPC) {}
+}
+
