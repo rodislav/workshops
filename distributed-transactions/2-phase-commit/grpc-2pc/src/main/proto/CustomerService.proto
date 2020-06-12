@@ -1,3 +1,4 @@
+syntax = "proto2";
 option java_package = "org.example.order.generated.grpc";
 
 message CustomerDebitRPC {

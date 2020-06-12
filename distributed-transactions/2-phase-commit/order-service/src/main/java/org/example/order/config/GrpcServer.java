@@ -25,7 +25,7 @@ public class GrpcServer {
 
         try {
             server.start();
-            log.info("Server started on port: {}", properties.getPort());
+            log.info("gRPC Server started on port: {}", properties.getPort());
         } catch (IOException e) {
             log.error("Cannot start gRPC server, e: {}", e.getMessage());
             log.debug("Cannot start gRPC server, exception details: ", e);

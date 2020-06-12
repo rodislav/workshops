@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
 @Table(name = "CUSTOMERS")
 //https://vladmihalcea.com/uuid-identifier-jpa-hibernate/
 public class Customer {
@@ -25,3 +23,4 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 }
+

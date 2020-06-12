@@ -13,6 +13,5 @@ public interface CustomerMapper {
 
     Customer toEntity(CustomerDTO dto);
 
-    @InheritInverseConfiguration
     CustomerDTO toDto(Customer entity);
 }

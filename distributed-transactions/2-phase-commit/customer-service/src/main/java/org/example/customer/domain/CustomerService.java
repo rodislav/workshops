@@ -28,7 +28,8 @@ public class CustomerService {
             throw new InsufficientFundsException();
         }
 
-        return repository.save(customer.setBudget(newBudget));
+        customer.setBudget(newBudget);
+        return repository.save(customer);
     }
 
     public Seq<Customer> findAll() {
@@ -36,7 +37,9 @@ public class CustomerService {
     }
 
     public Try<Customer> createCustomer(Customer customer) {
-        return Try.of(() -> repository
-                .save(customer.setCreated(LocalDateTime.now())));
+        return Try.of(() -> {
+            customer.setCreated(LocalDateTime.now());
+            return repository.save(customer);
+        });
     }
 }

@@ -2,13 +2,13 @@ package org.example.order.domain;
 
 import lombok.*;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +25,13 @@ public class Order {
     private OrderStatus status;
 
     private LocalDateTime created;
+
+    @Nullable
     private LocalDateTime placed;
+
+    @Nullable
     private LocalDateTime failed;
+
+    @Nullable
     private String message;
 }

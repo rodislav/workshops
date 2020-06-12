@@ -1,7 +1,11 @@
 package org.example.coordinator.domain;
 
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Metadata.Key;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
 import org.example.coordinator.config.CustomerServiceParams;
@@ -13,7 +17,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.UUID;
 
+import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
+
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class GrpcClient {
 
@@ -28,10 +35,12 @@ public class GrpcClient {
     public void init() {
         var orderCB = ManagedChannelBuilder
                 .forAddress(orderServiceParams.getHost(), orderServiceParams.getPort())
+                .usePlaintext()
                 .build();
 
         var customerCB = ManagedChannelBuilder
                 .forAddress(customerServiceParams.getHost(), customerServiceParams.getPort())
+                .usePlaintext()
                 .build();
 
         orderStub = OrderServiceGrpc.newBlockingStub(orderCB);
@@ -48,9 +57,43 @@ public class GrpcClient {
 
     public CustomerDTO debitCustomer(UUID customerId, Long amount) {
         var request = mapper.toRPC(customerId, amount);
-        var customerRPC = customerStub.debitCustomer(request);
 
-        return mapper.toDto(customerRPC);
+        try {
+            var customerRPC = customerStub.debitCustomer(request);
+
+            return mapper.toDto(customerRPC);
+        } catch (StatusRuntimeException e) {
+            log.error("Cannot debit customer, status: {}, message: {}", e.getStatus(), e.getMessage());
+
+            if (e.getStatus() == Status.NOT_FOUND) {
+                throw new RuntimeException(
+                        String.format(
+                                "Customer not found, id: %s, details: %s",
+                                customerId, trailersToString(e))
+                );
+            } else if (e.getStatus() == Status.INVALID_ARGUMENT) {
+                throw new RuntimeException(
+                        String.format(
+                                "Invalid argument, id: %s, details: %s",
+                                customerId, trailersToString(e))
+                );
+            }
+
+            throw new RuntimeException("Unknown error occurred");
+        }
+
+    }
+
+    private String trailersToString(StatusRuntimeException e) {
+        StringBuilder details = new StringBuilder();
+
+        if (e.getTrailers() != null) {
+            final var trailers = e.getTrailers().getAll(Key.of("code", ASCII_STRING_MARSHALLER));
+            if (trailers != null) {
+                trailers.forEach(details::append);
+            }
+        }
+        return details.toString();
     }
 
 

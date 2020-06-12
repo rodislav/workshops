@@ -3,9 +3,14 @@ package org.example.coordinator.domain;
 import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
 import org.example.order.generated.grpc.CustomerServiceOuterClass;
+import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
+import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
 import org.example.order.generated.grpc.OrderServiceOuterClass;
+import org.example.order.generated.grpc.OrderServiceOuterClass.OrderRPC;
+import org.example.order.generated.grpc.OrderServiceOuterClass.PlaceOrderRPC;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -14,14 +19,14 @@ import java.util.UUID;
 public class GrpcMapper {
     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    OrderServiceOuterClass.OrderRPC toRPC(OrderDTO order) {
-        return OrderServiceOuterClass.OrderRPC.newBuilder()
+    PlaceOrderRPC toRPC(OrderDTO order) {
+        return PlaceOrderRPC.newBuilder()
                 .setAmount(order.getAmount())
                 .setCustomerId(order.getCustomerId().toString())
                 .build();
     }
 
-    OrderDTO toDto(OrderServiceOuterClass.OrderRPC orderRPC) {
+    OrderDTO toDto(OrderRPC orderRPC) {
         return OrderDTO.builder()
                 .id(UUID.fromString(orderRPC.getId()))
                 .customerId(UUID.fromString(orderRPC.getCustomerId()))
@@ -33,15 +38,15 @@ public class GrpcMapper {
                 .build();
     }
 
-    CustomerServiceOuterClass.CustomerDebitRPC toRPC(UUID customerId, Long amount) {
-        return CustomerServiceOuterClass.CustomerDebitRPC
+    CustomerDebitRPC toRPC(UUID customerId, Long amount) {
+        return CustomerDebitRPC
                 .newBuilder()
                 .setCustomerId(customerId.toString())
                 .setAmount(amount)
                 .build();
     }
 
-    CustomerDTO toDto(CustomerServiceOuterClass.CustomerRPC customerRPC) {
+    CustomerDTO toDto(CustomerRPC customerRPC) {
         return CustomerDTO
                 .builder()
                 .id(UUID.fromString(customerRPC.getId()))
@@ -51,7 +56,12 @@ public class GrpcMapper {
                 .build();
     }
 
-    LocalDateTime toDateTime(String iso8601) {
+    @Nullable
+    LocalDateTime toDateTime(@Nullable String iso8601) {
+        if(iso8601 == null || iso8601.length() < 1) {
+            return null;
+        }
+
         return LocalDateTime.from(formatter.parse(iso8601));
     }
 

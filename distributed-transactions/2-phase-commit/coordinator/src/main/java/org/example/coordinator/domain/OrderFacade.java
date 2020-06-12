@@ -21,14 +21,9 @@ public class OrderFacade {
         return Try
                 .of(() -> grpcClient.debitCustomer(order.getCustomerId(), order.getAmount()))
                 .map(c -> grpcClient.doPlaceOrder(order))
-                .onFailure(TransactionException.class, e -> {
+                .onFailure(RuntimeException.class, e -> {
                     log.error("Failed to place an order, order: {}", order);
-                    throw (e);
+                    throw new OrderPlacementException(e.getMessage());
                 });
-    }
-
-    private OrderDTO doPlaceOrder(OrderDTO order) {
-        //  rest call
-        return null;
     }
 }
