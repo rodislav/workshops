@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.example</groupId>
+    <groupId>com.org.example</groupId>
     <artifactId>java-grpc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>Demo project for Spring Boot + gRPC</description>

@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>2-phase-commit</artifactId>
-        <groupId>org.org.example</groupId>
+        <groupId>org.example</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
