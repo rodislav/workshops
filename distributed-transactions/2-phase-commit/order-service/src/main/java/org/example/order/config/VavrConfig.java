@@ -1,4 +1,4 @@
-package org.example.customer;
+package org.example.order.config;
 
 import com.fasterxml.jackson.databind.Module;
 import io.vavr.jackson.datatype.VavrModule;

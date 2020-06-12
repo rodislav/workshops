@@ -1,4 +1,4 @@
-package org.example.coordinator;
+package org.example.coordinator.config;
 
 import com.fasterxml.jackson.databind.Module;
 import io.vavr.jackson.datatype.VavrModule;
