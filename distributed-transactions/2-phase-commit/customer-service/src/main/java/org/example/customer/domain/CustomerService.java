@@ -19,7 +19,10 @@ public class CustomerService {
         return repository.getById(customerId);
     }
 
-    public Customer debitBudget(Customer customer, Long amount) {
+    public Customer debitBudget(UUID customerId, Long amount) {
+        final var customer = findById(customerId)
+                .getOrElseThrow(() -> new CustomerNotFoundException(customerId));
+
         long newBudget = customer.getBudget() - Math.abs(amount);
         if (newBudget < 0) {
             throw new InsufficientFundsException();

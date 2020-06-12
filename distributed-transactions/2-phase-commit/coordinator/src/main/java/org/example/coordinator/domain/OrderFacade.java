@@ -3,12 +3,9 @@ package org.example.coordinator.domain;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionException;
-
-import java.util.UUID;
 
 @Service
 @Slf4j
