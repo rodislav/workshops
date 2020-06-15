@@ -37,8 +37,9 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
                         responseObserver.onError(new StatusRuntimeException(Status.INVALID_ARGUMENT, getSingleMeta("CustomerId")));
                         return;
                     }
-
+                    responseObserver.onCompleted();
                     break;
+
                 case EXECUTE:
                     UUID customerId = UUID.fromString(request.getCustomerDebit().getCustomerId());
                     final var customer = service.debitBudget(customerId, request.getCustomerDebit().getAmount());
@@ -46,12 +47,16 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
                     responseObserver.onNext(DebitStepResponseRPC.newBuilder()
                             .setCustomer(mapper.toRPC(customer))
                             .build());
+                    responseObserver.onCompleted();
                     break;
+
                 case COMMIT:
                     // todo actual commit
                     responseObserver.onCompleted();
                     break;
+
                 case ROLLBACK:
+                    responseObserver.onCompleted();
                     // todo rollback
                     break;
             }

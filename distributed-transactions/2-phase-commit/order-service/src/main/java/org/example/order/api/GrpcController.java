@@ -28,7 +28,9 @@ public class GrpcController extends OrderServiceImplBase {
             switch (request.getAction()) {
                 case LOCK:
                     // todo lock
+                    responseObserver.onCompleted();
                     break;
+
                 case EXECUTE:
                     Order order = mapper.toEntity(request.getOrder());
                     facade.placeOrder(order);
@@ -37,13 +39,17 @@ public class GrpcController extends OrderServiceImplBase {
                             .setOrder(mapper.toRPC(order))
                             .buildPartial());
 
+                    responseObserver.onCompleted();
                     break;
+
                 case COMMIT:
                     // todo actual commit
                     responseObserver.onCompleted();
                     break;
+
                 case ROLLBACK:
                     // todo rollback
+                    responseObserver.onCompleted();
                     break;
             }
         } catch (OrderPlacementException e) {
