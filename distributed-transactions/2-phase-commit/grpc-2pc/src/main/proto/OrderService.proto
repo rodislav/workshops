@@ -1,0 +1,39 @@
+syntax = "proto2";
+option java_package = "org.example.order.generated.grpc";
+option java_multiple_files = true;
+
+package Order;
+
+import "google/protobuf/empty.proto";
+import "TwoPC.proto";
+
+message PlaceStepRPC {
+  optional TwoPCActionRPC action = 1;
+  optional PlaceRPC order = 2;
+}
+
+message PlaceStepResponseRPC {
+  optional TwoPCActionRPC action = 1;
+  optional OrderRPC order = 2;
+}
+
+message PlaceRPC {
+  required string customerId = 1;
+  required int64 amount = 2;
+}
+
+message OrderRPC {
+  required string id = 1;
+  required string customerId = 2;
+  required int64 amount = 3;
+  required string status = 4;
+  required string created = 5;
+  optional string placed = 6;
+  optional string failed = 7;
+  optional string message = 8;
+}
+
+service OrderService {
+  rpc PlaceOrder(PlaceStepRPC) returns (PlaceStepResponseRPC) {}
+  rpc PlaceOrderAsync(stream PlaceStepRPC) returns (stream PlaceStepResponseRPC) {}
+}

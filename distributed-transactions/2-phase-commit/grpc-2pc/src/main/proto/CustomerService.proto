@@ -1,0 +1,35 @@
+syntax = "proto2";
+option java_package = "org.example.customer.generated.grpc";
+option java_multiple_files = true;
+
+package Customer;
+
+import "google/protobuf/empty.proto";
+import "TwoPC.proto";
+
+message DebitStepRPC {
+  required TwoPCActionRPC action = 1;
+  optional CustomerDebitRPC customerDebit = 2;
+}
+
+message DebitStepResponseRPC {
+  required TwoPCActionRPC action = 1;
+  optional CustomerRPC customer = 2;
+}
+
+message CustomerDebitRPC {
+  required string customerId = 1;
+  required int64 amount = 2;
+}
+
+message CustomerRPC {
+  required string id = 1;
+  required string firstName = 2;
+  required string lastName = 3;
+  required string created = 4;
+}
+
+service CustomerService {
+  rpc DebitCustomer(DebitStepRPC) returns (DebitStepResponseRPC) {}
+  rpc DebitCustomerAsync(stream DebitStepRPC) returns (stream DebitStepResponseRPC) {}
+}

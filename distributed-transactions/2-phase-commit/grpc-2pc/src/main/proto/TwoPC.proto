@@ -1,0 +1,10 @@
+syntax = "proto2";
+option java_package = "org.example.customer.generated.grpc";
+option java_multiple_files = true;
+
+enum TwoPCActionRPC {
+  LOCK = 1;
+  EXECUTE = 2;
+  COMMIT = 3;
+  ROLLBACK = 4;
+}

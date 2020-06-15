@@ -10,6 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.example.saga</groupId>
     <artifactId>saga</artifactId>
     <packaging>pom</packaging>
 
