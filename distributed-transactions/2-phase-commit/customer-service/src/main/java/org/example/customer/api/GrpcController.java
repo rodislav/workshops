@@ -11,8 +11,8 @@ import org.example.customer.domain.CustomerNotFoundException;
 import org.example.customer.domain.CustomerService;
 import org.example.customer.domain.InsufficientFundsException;
 import org.example.customer.generated.grpc.CustomerServiceGrpc;
-import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
-import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
+import org.example.customer.generated.grpc.DebitStepRPC;
+import org.example.customer.generated.grpc.DebitStepResponseRPC;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -26,20 +26,36 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
     private final CustomerService service;
 
     @Override
-    public void debitCustomer(CustomerDebitRPC request, StreamObserver<CustomerRPC> responseObserver) {
-        final UUID customerId;
+    public void debitCustomer(DebitStepRPC request, StreamObserver<DebitStepResponseRPC> responseObserver) {
         try {
-            customerId = UUID.fromString(request.getCustomerId());
-        } catch (IllegalArgumentException e) {
-            responseObserver.onError(new StatusRuntimeException(Status.INVALID_ARGUMENT, getSingleMeta("CustomerId")));
-            return;
-        }
+            switch (request.getAction()) {
+                case LOCK:
+                    // todo lock
+                    try {
+                        UUID customerId = UUID.fromString(request.getCustomerDebit().getCustomerId());
+                    } catch (IllegalArgumentException e) {
+                        responseObserver.onError(new StatusRuntimeException(Status.INVALID_ARGUMENT, getSingleMeta("CustomerId")));
+                        return;
+                    }
 
-        try {
-            final var customer = service.debitBudget(customerId, request.getAmount());
+                    break;
+                case EXECUTE:
+                    UUID customerId = UUID.fromString(request.getCustomerDebit().getCustomerId());
+                    final var customer = service.debitBudget(customerId, request.getCustomerDebit().getAmount());
 
-            responseObserver.onNext(mapper.toRPC(customer));
-            responseObserver.onCompleted();
+                    responseObserver.onNext(DebitStepResponseRPC.newBuilder()
+                            .setCustomer(mapper.toRPC(customer))
+                            .build());
+                    break;
+                case COMMIT:
+                    // todo actual commit
+                    responseObserver.onCompleted();
+                    break;
+                case ROLLBACK:
+                    // todo rollback
+                    break;
+            }
+
         } catch (CustomerNotFoundException e) {
             responseObserver.onError(new StatusRuntimeException(Status.NOT_FOUND));
         } catch (InsufficientFundsException e) {

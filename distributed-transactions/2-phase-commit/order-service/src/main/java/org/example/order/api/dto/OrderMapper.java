@@ -1,9 +1,8 @@
 package org.example.order.api.dto;
 
 import org.example.order.domain.Order;
-import org.example.order.generated.grpc.OrderServiceOuterClass;
-import org.example.order.generated.grpc.OrderServiceOuterClass.OrderRPC;
-import org.example.order.generated.grpc.OrderServiceOuterClass.PlaceOrderRPC;
+import org.example.order.generated.grpc.OrderRPC;
+import org.example.order.generated.grpc.PlaceRPC;
 import org.mapstruct.*;
 
 // https://www.baeldung.com/mapstruct
@@ -14,7 +13,7 @@ public interface OrderMapper {
 
     OrderDTO toDto(Order entity);
 
-    Order toEntity(PlaceOrderRPC request);
+    Order toEntity(PlaceRPC request);
 
     @Mappings({
             @Mapping(target = "message", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)

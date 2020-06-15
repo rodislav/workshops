@@ -54,8 +54,12 @@ public class GrpcClient {
         customerStub = CustomerServiceGrpc.newBlockingStub(customerCB);
     }
 
-    public CustomerDTO lockCustomerDebit() {
-        final var responseRPC = customerStub.debitCustomer(DebitStepRPC.newBuilder().setAction(TwoPCActionRPC.LOCK).build());
+    public CustomerDTO lockCustomerDebit(UUID customerId) {
+        final var responseRPC = customerStub.debitCustomer(DebitStepRPC.newBuilder()
+                .setAction(TwoPCActionRPC.LOCK)
+                .setCustomerDebit(mapper.toRPC(customerId, 0L))
+                .build());
+
         return mapper.toDto(responseRPC.getCustomer());
     }
 

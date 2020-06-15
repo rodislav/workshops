@@ -18,7 +18,7 @@ public class OrderFacade {
     //https://www.baeldung.com/spring-programmatic-transaction-management
     public Try<OrderDTO> placeOrder(OrderDTO order) {
         return Try
-                .of(() -> grpcClient.lockCustomerDebit())
+                .of(() -> grpcClient.lockCustomerDebit(order.getCustomerId()))
                 .map(c -> grpcClient.lockPlaceOrder())
                 .map(c -> grpcClient.debitCustomer(order.getCustomerId(), order.getAmount()))
                 .map(c -> grpcClient.placeOrder(order))

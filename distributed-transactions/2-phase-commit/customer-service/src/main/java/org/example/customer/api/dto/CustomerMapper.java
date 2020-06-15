@@ -1,14 +1,14 @@
 package org.example.customer.api.dto;
 
 import org.example.customer.domain.Customer;
-import org.example.customer.generated.grpc.CustomerServiceOuterClass;
+import org.example.customer.generated.grpc.CustomerRPC;
 import org.mapstruct.Mapper;
 
 //https://www.baeldung.com/mapstruct
 @Mapper(componentModel = "spring", uses = {UUIDToStringMapper.class, StringToUUIDMapper.class})
 public interface CustomerMapper {
 
-    CustomerServiceOuterClass.CustomerRPC toRPC(Customer customer);
+    CustomerRPC toRPC(Customer customer);
 
     Customer toEntity(CustomerDTO dto);
 

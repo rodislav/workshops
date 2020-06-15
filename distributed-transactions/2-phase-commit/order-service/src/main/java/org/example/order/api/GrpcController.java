@@ -10,9 +10,8 @@ import org.example.order.domain.Order;
 import org.example.order.domain.OrderFacade;
 import org.example.order.domain.OrderPlacementException;
 import org.example.order.generated.grpc.OrderServiceGrpc.OrderServiceImplBase;
-import org.example.order.generated.grpc.OrderServiceOuterClass;
-import org.example.order.generated.grpc.OrderServiceOuterClass.OrderRPC;
-import org.example.order.generated.grpc.OrderServiceOuterClass.PlaceOrderRPC;
+import org.example.order.generated.grpc.PlaceStepRPC;
+import org.example.order.generated.grpc.PlaceStepResponseRPC;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,13 +23,29 @@ public class GrpcController extends OrderServiceImplBase {
     private final OrderFacade facade;
 
     @Override
-    public void placeOrder(PlaceOrderRPC request, StreamObserver<OrderRPC> responseObserver) {
+    public void placeOrder(PlaceStepRPC request, StreamObserver<PlaceStepResponseRPC> responseObserver) {
         try {
-            Order order = mapper.toEntity(request);
-            facade.placeOrder(order);
+            switch (request.getAction()) {
+                case LOCK:
+                    // todo lock
+                    break;
+                case EXECUTE:
+                    Order order = mapper.toEntity(request.getOrder());
+                    facade.placeOrder(order);
 
-            responseObserver.onNext(mapper.toRPC(order));
-            responseObserver.onCompleted();
+                    responseObserver.onNext(PlaceStepResponseRPC.newBuilder()
+                            .setOrder(mapper.toRPC(order))
+                            .buildPartial());
+
+                    break;
+                case COMMIT:
+                    // todo actual commit
+                    responseObserver.onCompleted();
+                    break;
+                case ROLLBACK:
+                    // todo rollback
+                    break;
+            }
         } catch (OrderPlacementException e) {
             responseObserver.onError(new StatusRuntimeException(Status.INVALID_ARGUMENT.withDescription(e.getMessage())));
         } catch (Exception e) {
