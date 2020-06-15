@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.coordinator.api.OrderDTO;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionException;
 
 @Service
 @Slf4j
@@ -22,8 +21,12 @@ public class OrderFacade {
                 .of(() -> grpcClient.lockCustomerDebit())
                 .map(c -> grpcClient.lockPlaceOrder())
                 .map(c -> grpcClient.debitCustomer(order.getCustomerId(), order.getAmount()))
-                .map(c -> grpcClient.doPlaceOrder(order))
+                .map(c -> grpcClient.placeOrder(order))
+                .map(c -> grpcClient.commitCustomerDebit())
+                .map(c -> grpcClient.commitPlaceOrder())
                 .onFailure(RuntimeException.class, e -> {
+                    // grpcClient.undoCustomerDebit();
+                    // grpcClient.undoPlaceOrder();
                     log.error("Failed to place an order, order: {}", order);
                     throw new OrderPlacementException(e.getMessage());
                 });

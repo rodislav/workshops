@@ -10,9 +10,9 @@ import org.example.customer.api.dto.CustomerMapper;
 import org.example.customer.domain.CustomerNotFoundException;
 import org.example.customer.domain.CustomerService;
 import org.example.customer.domain.InsufficientFundsException;
-import org.example.order.generated.grpc.CustomerServiceGrpc;
-import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
-import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
+import org.example.customer.generated.grpc.CustomerServiceGrpc;
+import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
+import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

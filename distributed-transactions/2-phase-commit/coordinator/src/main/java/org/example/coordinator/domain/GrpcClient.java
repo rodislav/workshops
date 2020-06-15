@@ -1,6 +1,5 @@
 package org.example.coordinator.domain;
 
-import com.google.protobuf.Empty;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata.Key;
 import io.grpc.Status;
@@ -13,8 +12,11 @@ import org.example.coordinator.config.CustomerServiceParams;
 import org.example.coordinator.config.OrderServiceParams;
 import org.example.customer.generated.grpc.CustomerServiceGrpc;
 import org.example.customer.generated.grpc.CustomerServiceGrpc.CustomerServiceBlockingStub;
+import org.example.customer.generated.grpc.DebitStepRPC;
+import org.example.customer.generated.grpc.TwoPCActionRPC;
 import org.example.order.generated.grpc.OrderServiceGrpc;
 import org.example.order.generated.grpc.OrderServiceGrpc.OrderServiceBlockingStub;
+import org.example.order.generated.grpc.PlaceStepRPC;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -30,7 +32,6 @@ public class GrpcClient {
     private final GrpcMapper mapper;
     private final CustomerServiceParams customerServiceParams;
     private final OrderServiceParams orderServiceParams;
-    final Empty empty = Empty.newBuilder().build();
 
     OrderServiceBlockingStub orderStub;
     CustomerServiceBlockingStub customerStub;
@@ -39,11 +40,13 @@ public class GrpcClient {
     public void init() {
         var orderCB = ManagedChannelBuilder
                 .forAddress(orderServiceParams.getHost(), orderServiceParams.getPort())
+                .disableRetry()
                 .usePlaintext()
                 .build();
 
         var customerCB = ManagedChannelBuilder
                 .forAddress(customerServiceParams.getHost(), customerServiceParams.getPort())
+                .disableRetry()
                 .usePlaintext()
                 .build();
 
@@ -51,28 +54,37 @@ public class GrpcClient {
         customerStub = CustomerServiceGrpc.newBlockingStub(customerCB);
     }
 
-    public Empty lockCustomerDebit() {
-        return customerStub.lockDebitCustomer(empty);
+    public CustomerDTO lockCustomerDebit() {
+        final var responseRPC = customerStub.debitCustomer(DebitStepRPC.newBuilder().setAction(TwoPCActionRPC.LOCK).build());
+        return mapper.toDto(responseRPC.getCustomer());
     }
 
-    public Empty lockPlaceOrder() {
-        return orderStub.lockPlaceOrder(empty);
+    public OrderDTO lockPlaceOrder() {
+        final var r = orderStub.placeOrder(PlaceStepRPC.newBuilder().setAction(TwoPCActionRPC.LOCK).build());
+        return mapper.toDto(r.getOrder());
     }
 
-    public OrderDTO doPlaceOrder(OrderDTO order) {
-        var request = mapper.toRPC(order);
-        var orderRPC = orderStub.placeOrder(request);
+    public CustomerDTO commitCustomerDebit() {
+        final var responseRPC = customerStub.debitCustomer(DebitStepRPC.newBuilder().setAction(TwoPCActionRPC.COMMIT).build());
+        return mapper.toDto(responseRPC.getCustomer());
+    }
 
-        return mapper.toDto(orderRPC);
+    public OrderDTO commitPlaceOrder() {
+        final var r = orderStub.placeOrder(PlaceStepRPC.newBuilder().setAction(TwoPCActionRPC.COMMIT).build());
+        return mapper.toDto(r.getOrder());
     }
 
     public CustomerDTO debitCustomer(UUID customerId, Long amount) {
         var request = mapper.toRPC(customerId, amount);
 
         try {
-            var customerRPC = customerStub.debitCustomer(request);
+            var r = customerStub.debitCustomer(
+                    DebitStepRPC.newBuilder()
+                            .setAction(TwoPCActionRPC.EXECUTE)
+                            .setCustomerDebit(request)
+                            .build());
 
-            return mapper.toDto(customerRPC);
+            return mapper.toDto(r.getCustomer());
         } catch (StatusRuntimeException e) {
             log.error("Cannot debit customer, status: {}, message: {}", e.getStatus(), e.getMessage());
 
@@ -93,6 +105,17 @@ public class GrpcClient {
             throw new RuntimeException("Unknown error occurred");
         }
 
+    }
+
+    public OrderDTO placeOrder(OrderDTO order) {
+        var request = mapper.toRPC(order);
+        var r = orderStub.placeOrder(
+                PlaceStepRPC.newBuilder()
+                        .setAction(TwoPCActionRPC.EXECUTE)
+                        .setOrder(request)
+                        .build());
+
+        return mapper.toDto(r.getOrder());
     }
 
     private String trailersToString(StatusRuntimeException e) {

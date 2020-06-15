@@ -5,8 +5,19 @@ option java_multiple_files = true;
 package Order;
 
 import "google/protobuf/empty.proto";
+import "TwoPC.proto";
 
-message PlaceOrderRPC {
+message PlaceStepRPC {
+  optional TwoPCActionRPC action = 1;
+  optional PlaceRPC order = 2;
+}
+
+message PlaceStepResponseRPC {
+  required bool succeded = 1;
+  optional OrderRPC order = 2;
+}
+
+message PlaceRPC {
   required string customerId = 1;
   required int64 amount = 2;
 }
@@ -23,6 +34,5 @@ message OrderRPC {
 }
 
 service OrderService {
-  rpc LockPlaceOrder(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc PlaceOrder(PlaceOrderRPC) returns (OrderRPC) {}
+  rpc PlaceOrder(PlaceStepRPC) returns (PlaceStepResponseRPC) {}
 }

@@ -5,6 +5,17 @@ option java_multiple_files = true;
 package Customer;
 
 import "google/protobuf/empty.proto";
+import "TwoPC.proto";
+
+message DebitStepRPC {
+  optional TwoPCActionRPC action = 1;
+  optional CustomerDebitRPC customerDebit = 2;
+}
+
+message DebitStepResponseRPC {
+  required bool succeded = 1;
+  optional CustomerRPC customer = 2;
+}
 
 message CustomerDebitRPC {
   required string customerId = 1;
@@ -19,6 +30,5 @@ message CustomerRPC {
 }
 
 service CustomerService {
-  rpc LockDebitCustomer(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc DebitCustomer(CustomerDebitRPC) returns (CustomerRPC) {}
+  rpc DebitCustomer(DebitStepRPC) returns (DebitStepResponseRPC) {}
 }

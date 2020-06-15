@@ -2,10 +2,10 @@ package org.example.coordinator.domain;
 
 import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
-import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
-import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
-import org.example.order.generated.grpc.OrderServiceOuterClass.OrderRPC;
-import org.example.order.generated.grpc.OrderServiceOuterClass.PlaceOrderRPC;
+import org.example.customer.generated.grpc.CustomerDebitRPC;
+import org.example.customer.generated.grpc.CustomerRPC;
+import org.example.order.generated.grpc.OrderRPC;
+import org.example.order.generated.grpc.PlaceRPC;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
@@ -17,8 +17,8 @@ import java.util.UUID;
 public class GrpcMapper {
     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    PlaceOrderRPC toRPC(OrderDTO order) {
-        return PlaceOrderRPC.newBuilder()
+    PlaceRPC toRPC(OrderDTO order) {
+        return PlaceRPC.newBuilder()
                 .setAmount(order.getAmount())
                 .setCustomerId(order.getCustomerId().toString())
                 .build();
