@@ -19,7 +19,9 @@ public class OrderFacade {
     //https://www.baeldung.com/spring-programmatic-transaction-management
     public Try<OrderDTO> placeOrder(OrderDTO order) {
         return Try
-                .of(() -> grpcClient.debitCustomer(order.getCustomerId(), order.getAmount()))
+                .of(() -> grpcClient.lockCustomerDebit())
+                .map(c -> grpcClient.lockPlaceOrder())
+                .map(c -> grpcClient.debitCustomer(order.getCustomerId(), order.getAmount()))
                 .map(c -> grpcClient.doPlaceOrder(order))
                 .onFailure(RuntimeException.class, e -> {
                     log.error("Failed to place an order, order: {}", order);

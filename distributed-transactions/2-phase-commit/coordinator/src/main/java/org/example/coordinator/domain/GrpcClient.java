@@ -1,5 +1,6 @@
 package org.example.coordinator.domain;
 
+import com.google.protobuf.Empty;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata.Key;
 import io.grpc.Status;
@@ -10,8 +11,10 @@ import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
 import org.example.coordinator.config.CustomerServiceParams;
 import org.example.coordinator.config.OrderServiceParams;
-import org.example.order.generated.grpc.CustomerServiceGrpc;
+import org.example.customer.generated.grpc.CustomerServiceGrpc;
+import org.example.customer.generated.grpc.CustomerServiceGrpc.CustomerServiceBlockingStub;
 import org.example.order.generated.grpc.OrderServiceGrpc;
+import org.example.order.generated.grpc.OrderServiceGrpc.OrderServiceBlockingStub;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -27,9 +30,10 @@ public class GrpcClient {
     private final GrpcMapper mapper;
     private final CustomerServiceParams customerServiceParams;
     private final OrderServiceParams orderServiceParams;
+    final Empty empty = Empty.newBuilder().build();
 
-    OrderServiceGrpc.OrderServiceBlockingStub orderStub;
-    CustomerServiceGrpc.CustomerServiceBlockingStub customerStub;
+    OrderServiceBlockingStub orderStub;
+    CustomerServiceBlockingStub customerStub;
 
     @PostConstruct
     public void init() {
@@ -47,6 +51,13 @@ public class GrpcClient {
         customerStub = CustomerServiceGrpc.newBlockingStub(customerCB);
     }
 
+    public Empty lockCustomerDebit() {
+        return customerStub.lockDebitCustomer(empty);
+    }
+
+    public Empty lockPlaceOrder() {
+        return orderStub.lockPlaceOrder(empty);
+    }
 
     public OrderDTO doPlaceOrder(OrderDTO order) {
         var request = mapper.toRPC(order);

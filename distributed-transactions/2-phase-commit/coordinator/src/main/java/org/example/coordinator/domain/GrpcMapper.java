@@ -2,10 +2,8 @@ package org.example.coordinator.domain;
 
 import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
-import org.example.order.generated.grpc.CustomerServiceOuterClass;
-import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
-import org.example.order.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
-import org.example.order.generated.grpc.OrderServiceOuterClass;
+import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerDebitRPC;
+import org.example.customer.generated.grpc.CustomerServiceOuterClass.CustomerRPC;
 import org.example.order.generated.grpc.OrderServiceOuterClass.OrderRPC;
 import org.example.order.generated.grpc.OrderServiceOuterClass.PlaceOrderRPC;
 import org.springframework.stereotype.Component;
