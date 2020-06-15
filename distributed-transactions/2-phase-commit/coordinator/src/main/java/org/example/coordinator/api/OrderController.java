@@ -33,7 +33,7 @@ public class OrderController {
 
     @ExceptionHandler(OrderPlacementException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map handleOrderPlacementException(HttpServletRequest req, OrderPlacementException e) {
+    public Map<String, String> handleOrderPlacementException(HttpServletRequest req, OrderPlacementException e) {
         log.error("Request: " + req.getRequestURL() + " raised " + e);
 
         Map<String, String> mav = new HashMap<>();
