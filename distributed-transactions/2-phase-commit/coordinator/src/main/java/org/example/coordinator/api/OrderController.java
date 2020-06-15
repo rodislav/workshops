@@ -31,6 +31,13 @@ public class OrderController {
                 .get();
     }
 
+    //https://www.baeldung.com/spring-response-header
+    @PostMapping("async")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void placeAsync(@RequestBody OrderDTO order) {
+        orderFacade.placeOrderAsync(order);
+    }
+
     @ExceptionHandler(OrderPlacementException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleOrderPlacementException(HttpServletRequest req, OrderPlacementException e) {

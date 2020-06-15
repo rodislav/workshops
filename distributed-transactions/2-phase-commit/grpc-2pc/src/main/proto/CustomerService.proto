@@ -8,12 +8,12 @@ import "google/protobuf/empty.proto";
 import "TwoPC.proto";
 
 message DebitStepRPC {
-  optional TwoPCActionRPC action = 1;
+  required TwoPCActionRPC action = 1;
   optional CustomerDebitRPC customerDebit = 2;
 }
 
 message DebitStepResponseRPC {
-  required bool succeded = 1;
+  required TwoPCActionRPC action = 1;
   optional CustomerRPC customer = 2;
 }
 
@@ -31,4 +31,5 @@ message CustomerRPC {
 
 service CustomerService {
   rpc DebitCustomer(DebitStepRPC) returns (DebitStepResponseRPC) {}
+  rpc DebitCustomerAsync(stream DebitStepRPC) returns (stream DebitStepResponseRPC) {}
 }

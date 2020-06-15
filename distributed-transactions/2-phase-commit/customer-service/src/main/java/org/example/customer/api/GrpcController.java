@@ -11,8 +11,10 @@ import org.example.customer.domain.CustomerNotFoundException;
 import org.example.customer.domain.CustomerService;
 import org.example.customer.domain.InsufficientFundsException;
 import org.example.customer.generated.grpc.CustomerServiceGrpc;
+import org.example.customer.generated.grpc.CustomerServiceGrpc.CustomerServiceImplBase;
 import org.example.customer.generated.grpc.DebitStepRPC;
 import org.example.customer.generated.grpc.DebitStepResponseRPC;
+import org.example.customer.generated.grpc.TwoPCActionRPC;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -20,7 +22,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase {
+public class GrpcController extends CustomerServiceImplBase {
 
     private final CustomerMapper mapper;
     private final CustomerService service;
@@ -37,7 +39,7 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
                         responseObserver.onError(new StatusRuntimeException(Status.INVALID_ARGUMENT, getSingleMeta("CustomerId")));
                         return;
                     }
-                    responseObserver.onCompleted();
+                    responseObserver.onNext(DebitStepResponseRPC.newBuilder().setAction(request.getAction()).build());
                     break;
 
                 case EXECUTE:
@@ -45,17 +47,19 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
                     final var customer = service.debitBudget(customerId, request.getCustomerDebit().getAmount());
 
                     responseObserver.onNext(DebitStepResponseRPC.newBuilder()
+                            .setAction(request.getAction())
                             .setCustomer(mapper.toRPC(customer))
                             .build());
-                    responseObserver.onCompleted();
                     break;
 
                 case COMMIT:
                     // todo actual commit
+                    responseObserver.onNext(DebitStepResponseRPC.newBuilder().setAction(request.getAction()).build());
                     responseObserver.onCompleted();
                     break;
 
                 case ROLLBACK:
+                    responseObserver.onNext(DebitStepResponseRPC.newBuilder().setAction(request.getAction()).build());
                     responseObserver.onCompleted();
                     // todo rollback
                     break;
@@ -70,6 +74,27 @@ public class GrpcController extends CustomerServiceGrpc.CustomerServiceImplBase 
             log.debug(e.getMessage(), e);
             responseObserver.onError(new StatusRuntimeException(Status.INTERNAL));
         }
+    }
+
+    @Override
+    public StreamObserver<DebitStepRPC> debitCustomerAsync(StreamObserver<DebitStepResponseRPC> responseObserver) {
+        return new StreamObserver<>() {
+
+            @Override
+            public void onNext(DebitStepRPC value) {
+                debitCustomer(value, responseObserver);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.error(t.getMessage(), t);
+            }
+
+            @Override
+            public void onCompleted() {
+                log.info("completed");
+            }
+        };
     }
 
     private Metadata getSingleMeta(String value) {

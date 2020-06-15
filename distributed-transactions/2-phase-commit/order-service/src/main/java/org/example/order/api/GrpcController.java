@@ -5,6 +5,8 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.customer.generated.grpc.DebitStepRPC;
+import org.example.customer.generated.grpc.TwoPCActionRPC;
 import org.example.order.api.dto.OrderMapper;
 import org.example.order.domain.Order;
 import org.example.order.domain.OrderFacade;
@@ -28,7 +30,7 @@ public class GrpcController extends OrderServiceImplBase {
             switch (request.getAction()) {
                 case LOCK:
                     // todo lock
-                    responseObserver.onCompleted();
+                    responseObserver.onNext(PlaceStepResponseRPC.newBuilder().setAction(TwoPCActionRPC.LOCK).build());
                     break;
 
                 case EXECUTE:
@@ -36,19 +38,21 @@ public class GrpcController extends OrderServiceImplBase {
                     facade.placeOrder(order);
 
                     responseObserver.onNext(PlaceStepResponseRPC.newBuilder()
+                            .setAction(request.getAction())
                             .setOrder(mapper.toRPC(order))
                             .buildPartial());
 
-                    responseObserver.onCompleted();
                     break;
 
                 case COMMIT:
                     // todo actual commit
+                    responseObserver.onNext(PlaceStepResponseRPC.newBuilder().setAction(request.getAction()).build());
                     responseObserver.onCompleted();
                     break;
 
                 case ROLLBACK:
                     // todo rollback
+                    responseObserver.onNext(PlaceStepResponseRPC.newBuilder().setAction(request.getAction()).build());
                     responseObserver.onCompleted();
                     break;
             }
@@ -59,5 +63,26 @@ public class GrpcController extends OrderServiceImplBase {
             log.debug(e.getMessage(), e);
             responseObserver.onError(new StatusRuntimeException(Status.INTERNAL));
         }
+    }
+
+    @Override
+    public StreamObserver<PlaceStepRPC> placeOrderAsync(StreamObserver<PlaceStepResponseRPC> responseObserver) {
+        return new StreamObserver<>() {
+
+            @Override
+            public void onNext(PlaceStepRPC value) {
+                placeOrder(value, responseObserver);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.error(t.getMessage(), t);
+            }
+
+            @Override
+            public void onCompleted() {
+                log.info("completed");
+            }
+        };
     }
 }

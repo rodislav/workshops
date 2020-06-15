@@ -13,7 +13,7 @@ message PlaceStepRPC {
 }
 
 message PlaceStepResponseRPC {
-  required bool succeded = 1;
+  optional TwoPCActionRPC action = 1;
   optional OrderRPC order = 2;
 }
 
@@ -35,4 +35,5 @@ message OrderRPC {
 
 service OrderService {
   rpc PlaceOrder(PlaceStepRPC) returns (PlaceStepResponseRPC) {}
+  rpc PlaceOrderAsync(stream PlaceStepRPC) returns (stream PlaceStepResponseRPC) {}
 }
