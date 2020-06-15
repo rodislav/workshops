@@ -74,6 +74,16 @@ public class GrpcClient {
         return mapper.toDto(r.getOrder());
     }
 
+    public CustomerDTO rollbackCustomerDebit() {
+        final var responseRPC = customerStub.debitCustomer(DebitStepRPC.newBuilder().setAction(TwoPCActionRPC.ROLLBACK).build());
+        return mapper.toDto(responseRPC.getCustomer());
+    }
+
+    public OrderDTO rollbackPlaceOrder() {
+        final var r = orderStub.placeOrder(PlaceStepRPC.newBuilder().setAction(TwoPCActionRPC.ROLLBACK).build());
+        return mapper.toDto(r.getOrder());
+    }
+
     public CustomerDTO debitCustomer(UUID customerId, Long amount) {
         var request = mapper.toRPC(customerId, amount);
 

@@ -25,8 +25,8 @@ public class OrderFacade {
                 .map(c -> grpcClient.commitCustomerDebit())
                 .map(c -> grpcClient.commitPlaceOrder())
                 .onFailure(RuntimeException.class, e -> {
-                    // grpcClient.undoCustomerDebit();
-                    // grpcClient.undoPlaceOrder();
+                    grpcClient.rollbackCustomerDebit();
+                    grpcClient.rollbackPlaceOrder();
                     log.error("Failed to place an order, order: {}", order);
                     throw new OrderPlacementException(e.getMessage());
                 });
