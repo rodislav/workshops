@@ -1,9 +1,7 @@
 package org.example.saga.order.domain;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.saga.api.DebitCustomerRequest;
-import org.example.saga.api.PlaceOrderRequest;
-import org.example.saga.api.PlaceOrderResponse;
+import org.example.saga.api.PlaceOrderStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -15,7 +13,7 @@ public class JMSClient {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void send(PlaceOrderResponse r) {
+    public void send(PlaceOrderStep r) {
         log.info("place-order {}", r.getAction());
         jmsTemplate.convertAndSend("place-order.response", r);
     }
