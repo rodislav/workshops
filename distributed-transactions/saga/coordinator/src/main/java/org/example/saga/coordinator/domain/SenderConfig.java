@@ -27,9 +27,4 @@ public class SenderConfig {
     public JmsTemplate jmsTemplate() {
         return new JmsTemplate(cachingConnectionFactory());
     }
-
-    @Bean
-    public Sender sender() {
-        return new Sender();
-    }
 }

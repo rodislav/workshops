@@ -28,9 +28,4 @@ public class ReceiverConfig {
 
         return factory;
     }
-
-    @Bean
-    public Receiver receiver() {
-        return new Receiver();
-    }
 }
