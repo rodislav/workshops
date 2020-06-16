@@ -329,14 +329,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:/7092/order",
+							"raw": "http://localhost:7092/order",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "",
+							"port": "7092",
 							"path": [
-								"7092",
 								"order"
 							]
 						}
@@ -358,14 +357,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:/7091/customers",
+							"raw": "http://localhost:7091/customers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "",
+							"port": "7091",
 							"path": [
-								"7091",
 								"customers"
 							]
 						}
@@ -378,14 +376,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:/7091/customers",
+							"raw": "http://localhost:7091/customers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "",
+							"port": "7091",
 							"path": [
-								"7091",
 								"customers"
 							]
 						}
