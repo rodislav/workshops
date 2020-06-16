@@ -1,4 +1,4 @@
-package org.example.saga.order;
+package org.example.saga.order.config;
 
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;

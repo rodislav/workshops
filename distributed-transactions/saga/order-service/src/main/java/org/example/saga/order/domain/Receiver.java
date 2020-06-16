@@ -1,4 +1,4 @@
-package org.example.saga.order;
+package org.example.saga.order.domain;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
