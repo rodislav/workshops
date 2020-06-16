@@ -26,4 +26,33 @@ public abstract class FlowWithEvents {
                 break;
         }
     }
+
+    public final void lock(Pipe c) {
+        onLock = c;
+        doLock();
+    }
+
+    protected abstract void doLock();
+
+    public final void execute(Pipe c) {
+        onExecute = c;
+        doExecute();
+    }
+
+    protected abstract void doExecute();
+
+    public final void commit(Pipe c) {
+        onCommit = c;
+        doCommit();
+    }
+
+    protected abstract void doCommit();
+
+    public final void rollback(Pipe c) {
+        onRollback = c;
+        doRollback();
+    }
+
+    protected abstract void doRollback();
+
 }

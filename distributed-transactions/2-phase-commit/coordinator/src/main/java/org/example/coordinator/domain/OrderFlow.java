@@ -21,20 +21,16 @@ class OrderFlow extends FlowWithEvents implements StreamObserver<PlaceStepRespon
     @Getter
     private OrderDTO result;
     private StreamObserver<PlaceStepRPC> stepObserver;
-    private Pipe lockPipe;
 
     public void init() {
         stepObserver = grpcClientAsync.init(this);
     }
 
-    public void lock(Pipe c) {
-        onLock = c;
+    protected void doLock() {
         stepObserver.onNext(getStep(LOCK));
     }
 
-    public void execute(Pipe c) {
-        onExecute = c;
-
+    protected void doExecute() {
         var rpc = PlaceStepRPC.newBuilder()
                 .setOrder(mapper.toRPC(dto))
                 .setAction(EXECUTE)
@@ -43,13 +39,11 @@ class OrderFlow extends FlowWithEvents implements StreamObserver<PlaceStepRespon
         stepObserver.onNext(rpc);
     }
 
-    public void commit(Pipe c) {
-        onCommit = c;
+    protected void doCommit(Pipe c) {
         stepObserver.onNext(getStep(COMMIT));
     }
 
-    public void rollback(Pipe c) {
-        onRollback = c;
+    public void doRollback(Pipe c) {
         stepObserver.onNext(getStep(ROLLBACK));
     }
 

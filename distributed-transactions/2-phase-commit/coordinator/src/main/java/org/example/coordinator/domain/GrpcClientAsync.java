@@ -34,7 +34,6 @@ import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
 @RequiredArgsConstructor
 public class GrpcClientAsync {
 
-    private final GrpcMapper mapper;
     private final CustomerServiceParams customerServiceParams;
     private final OrderServiceParams orderServiceParams;
 
