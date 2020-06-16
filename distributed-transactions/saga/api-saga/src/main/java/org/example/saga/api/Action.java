@@ -1,6 +1,8 @@
 package org.example.saga.api;
 
-public enum Action {
+import java.io.Serializable;
+
+public enum Action implements Serializable {
     EXECUTE,
     ERROR,
     ROLLBACK,

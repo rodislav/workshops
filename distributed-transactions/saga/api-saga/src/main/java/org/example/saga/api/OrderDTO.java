@@ -3,6 +3,7 @@ package org.example.saga.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 //https://www.baeldung.com/jackson-ignore-null-fields
-public class OrderDTO {
+public class OrderDTO implements Serializable {
     private UUID id;
     private UUID customerId;
 

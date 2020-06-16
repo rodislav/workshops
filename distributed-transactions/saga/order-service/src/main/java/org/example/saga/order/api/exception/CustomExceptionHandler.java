@@ -1,8 +1,8 @@
 package org.example.saga.order.api.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.example.order.domain.OrderNotValidException;
-import org.example.order.domain.OrderPlacementException;
+import org.example.saga.order.domain.OrderNotValidException;
+import org.example.saga.order.domain.OrderPlacementException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

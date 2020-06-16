@@ -3,6 +3,7 @@ package org.example.saga.customer.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.saga.api.DebitCustomerRequest;
+import org.example.saga.api.DebitCustomerResponse;
 import org.example.saga.customer.domain.CustomerService;
 import org.example.saga.customer.domain.JMSClient;
 import org.springframework.jms.annotation.JmsListener;
@@ -24,19 +25,19 @@ public class CustomerJMSController {
             case EXECUTE:
                 try {
                     service.debitBudget(request.getOrder().getCustomerId(), request.getOrder().getAmount());
-                    jmsClient.send(DebitCustomerRequest.execute(request.getOrder()));
+                    jmsClient.send(DebitCustomerResponse.execute(request.getOrder()));
                 } catch (Exception e) {
                     log.error(e.getMessage());
-                    jmsClient.send(DebitCustomerRequest.error(request.getOrder()));
+                    jmsClient.send(DebitCustomerResponse.error(request.getOrder()));
                 }
 
             case ROLLBACK:
                 try {
                     service.creditBudget(request.getOrder().getCustomerId(), request.getOrder().getAmount());
-                    jmsClient.send(DebitCustomerRequest.rollback(request.getOrder()));
+                    jmsClient.send(DebitCustomerResponse.rollback(request.getOrder()));
                 } catch (Exception e) {
                     log.error(e.getMessage());
-                    jmsClient.send(DebitCustomerRequest.error(request.getOrder()));
+                    jmsClient.send(DebitCustomerResponse.error(request.getOrder()));
                 }
 
         }

@@ -4,14 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.io.Serializable;
 
 import static org.example.saga.api.Action.*;
 
 @Setter
 @Getter
 @Builder
-public class PlaceOrderRequest {
+public class PlaceOrderRequest implements Serializable {
     private Action action;
     private OrderDTO order;
 

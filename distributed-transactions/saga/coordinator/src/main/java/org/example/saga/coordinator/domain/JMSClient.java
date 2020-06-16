@@ -16,11 +16,11 @@ public class JMSClient {
 
     public void send(DebitCustomerRequest r) {
         log.info("place-order-customer {}", r.getAction());
-        jmsTemplate.convertAndSend("place-order-customer", r.getAction());
+        jmsTemplate.convertAndSend("place-order-customer", r);
     }
 
     public void send(PlaceOrderRequest r) {
         log.info("place-order {}", r.getAction());
-        jmsTemplate.convertAndSend("place-order", r.getAction());
+        jmsTemplate.convertAndSend("place-order", r);
     }
 }
