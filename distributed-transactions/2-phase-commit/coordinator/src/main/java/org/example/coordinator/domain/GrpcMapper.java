@@ -2,6 +2,7 @@ package org.example.coordinator.domain;
 
 import org.example.coordinator.api.CustomerDTO;
 import org.example.coordinator.api.OrderDTO;
+import org.example.coordinator.api.OrderStatus;
 import org.example.customer.generated.grpc.CustomerDebitRPC;
 import org.example.customer.generated.grpc.CustomerRPC;
 import org.example.order.generated.grpc.OrderRPC;

@@ -2,7 +2,6 @@ package org.example.coordinator.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import org.example.coordinator.domain.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

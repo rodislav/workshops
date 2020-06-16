@@ -12,27 +12,26 @@ import org.springframework.stereotype.Service;
 public class OrderFacade {
 
     private final GrpcMapper mapper;
-    private final GrpcClientAsync grpcClientAsync;
+    private final GrpcClient grpcClient;
 
     @Async
     public void placeOrderAsync(OrderDTO order) {
-        final var orderFlow = new OrderFlow(order, grpcClientAsync, mapper);
-        final var customerFlow = new CustomerFlow(grpcClientAsync, mapper, order.getCustomerId(), order.getAmount());
+        final var orderFlow = new OrderFlow(order, grpcClient, mapper);
+        final var customerFlow = new CustomerFlow(grpcClient, mapper, order.getCustomerId(), order.getAmount());
 
         try {
             customerFlow.init();
             orderFlow.init();
 
             Pipe pipe = new Pipe();
-            pipe
-                    .then((c) -> customerFlow.lock(c))
-                    .then((c) -> orderFlow.lock(c))
-                    .then((c) -> customerFlow.execute(c))
-                    .then((c) -> orderFlow.execute(c))
-                    .then((c) -> customerFlow.commit(c))
-                    .then((c) -> orderFlow.commit(c))
-                    .then((c) -> customerFlow.end(c))
-                    .then((c) -> orderFlow.end(c));
+            pipe.then(customerFlow::lock)
+                    .then(orderFlow::lock)
+                    .then(customerFlow::execute)
+                    .then(orderFlow::execute)
+                    .then(customerFlow::commit)
+                    .then(orderFlow::commit)
+                    .then(customerFlow::end)
+                    .then(orderFlow::end);
 
             pipe.start();
 
@@ -40,6 +39,8 @@ public class OrderFacade {
             log.error(e.getMessage(), e);
             orderFlow.rollback(null);
             customerFlow.rollback(null);
+
+            throw new OrderPlacementException(order, e.getMessage());
         }
     }
 }

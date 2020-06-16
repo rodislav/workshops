@@ -17,7 +17,7 @@ import static org.example.customer.generated.grpc.TwoPCActionRPC.*;
 @Slf4j
 @RequiredArgsConstructor
 class CustomerFlow extends FlowWithEvents implements StreamObserver<DebitStepResponseRPC> {
-    private final GrpcClientAsync grpcClientAsync;
+    private final GrpcClient grpcClient;
     private final GrpcMapper mapper;
     private final UUID customerId;
     private final long amount;
@@ -27,11 +27,10 @@ class CustomerFlow extends FlowWithEvents implements StreamObserver<DebitStepRes
     private StreamObserver<DebitStepRPC> stepObserver;
 
     public void init() {
-        stepObserver = grpcClientAsync.init(this);
+        stepObserver = grpcClient.init(this);
     }
 
-    public void lock(Pipe c) {
-        onLock = c;
+    protected void doLock() {
         final var request = CustomerDebitRPC.newBuilder()
                 .setCustomerId(customerId.toString())
                 .setAmount(amount)
@@ -45,8 +44,7 @@ class CustomerFlow extends FlowWithEvents implements StreamObserver<DebitStepRes
         stepObserver.onNext(step);
     }
 
-    public void execute(Pipe c) {
-        onExecute = c;
+    protected void doExecute() {
         final var request = CustomerDebitRPC.newBuilder()
                 .setCustomerId(customerId.toString())
                 .setAmount(amount)
@@ -60,13 +58,11 @@ class CustomerFlow extends FlowWithEvents implements StreamObserver<DebitStepRes
         stepObserver.onNext(step);
     }
 
-    public void commit(Pipe c) {
-        onCommit = c;
+    protected void doCommit() {
         stepObserver.onNext(getStep(COMMIT));
     }
 
-    public void rollback(Pipe c) {
-        onRollback = c;
+    protected void doRollback() {
         stepObserver.onNext(getStep(ROLLBACK));
     }
 

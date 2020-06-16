@@ -32,7 +32,7 @@ import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class GrpcClientAsync {
+public class GrpcClient {
 
     private final CustomerServiceParams customerServiceParams;
     private final OrderServiceParams orderServiceParams;

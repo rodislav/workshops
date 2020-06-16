@@ -15,7 +15,7 @@ import static org.example.customer.generated.grpc.TwoPCActionRPC.*;
 @RequiredArgsConstructor
 class OrderFlow extends FlowWithEvents implements StreamObserver<PlaceStepResponseRPC> {
     private final OrderDTO dto;
-    private final GrpcClientAsync grpcClientAsync;
+    private final GrpcClient grpcClient;
     private final GrpcMapper mapper;
 
     @Getter
@@ -23,7 +23,7 @@ class OrderFlow extends FlowWithEvents implements StreamObserver<PlaceStepRespon
     private StreamObserver<PlaceStepRPC> stepObserver;
 
     public void init() {
-        stepObserver = grpcClientAsync.init(this);
+        stepObserver = grpcClient.init(this);
     }
 
     protected void doLock() {
