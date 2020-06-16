@@ -12,4 +12,12 @@
 
     <artifactId>coordinator-saga</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.example.saga</groupId>
+            <artifactId>api-saga</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
