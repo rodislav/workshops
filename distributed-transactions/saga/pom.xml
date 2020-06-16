@@ -18,6 +18,14 @@
         <module>customer-service</module>
         <module>order-service</module>
         <module>coordinator</module>
+        <module>api-saga</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
