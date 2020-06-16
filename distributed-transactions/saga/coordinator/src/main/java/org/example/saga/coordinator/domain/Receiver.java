@@ -6,7 +6,7 @@ import org.springframework.jms.annotation.JmsListener;
 @Slf4j
 public class Receiver {
 
-    @JmsListener(destination = "helloworld.q")
+    @JmsListener(destination = "place-order-response")
     public void receive(String message) {
         log.info("received message='{}'", message);
 

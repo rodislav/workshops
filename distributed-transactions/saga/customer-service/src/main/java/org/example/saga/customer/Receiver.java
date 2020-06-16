@@ -1,24 +1,14 @@
 package org.example.saga.customer;
 
-import java.util.concurrent.CountDownLatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 
+@Slf4j
 public class Receiver {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(Receiver.class);
-
-    private CountDownLatch latch = new CountDownLatch(1);
-
-    public CountDownLatch getLatch() {
-        return latch;
-    }
-
-    @JmsListener(destination = "helloworld.q")
+    @JmsListener(destination = "place-order-customer")
     public void receive(String message) {
-        LOGGER.info("received message='{}'", message);
-        latch.countDown();
+        log.info("received message='{}'", message);
+
     }
 }
