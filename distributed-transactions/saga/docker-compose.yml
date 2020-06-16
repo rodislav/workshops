@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  dt-saga-jms:
+    container_name: dt-saga-jms
+    image: vromero/activemq-artemis:alpine-latest
+    ports:
+    - 8161:8161
+    - 61616:61616
+    environment:
+#      ARTEMIS_USERNAME: artemis
+#      ARTEMIS_PASSWORD: simetraehcapa
+      DISABLE_SECURITY: "true"
+      ARTEMIS_MIN_MEMORY: 64M
+      ARTEMIS_MAX_MEMORY: 128M
