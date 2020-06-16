@@ -22,7 +22,7 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void placeAsync(@RequestBody OrderDTO order) {
-        orderFacade.placeOrderAsync(order);
+        orderFacade.startPlacingOrder(order);
     }
 
     @ExceptionHandler(OrderPlacementException.class)

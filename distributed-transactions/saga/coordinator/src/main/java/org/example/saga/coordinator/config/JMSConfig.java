@@ -1,4 +1,4 @@
-package org.example.saga.coordinator.domain;
+package org.example.saga.coordinator.config;
 
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
@@ -10,7 +10,7 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 
 @Configuration
 @EnableJms
-public class ReceiverConfig {
+public class JMSConfig {
 
     @Value("${artemis.broker-url}")
     private String brokerUrl;

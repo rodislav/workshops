@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 public class DebitCustomerResponse {
     private Action action;
-    private CustomerDTO customer;
+    private OrderDTO order;
 }

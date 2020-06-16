@@ -1,4 +1,4 @@
-package org.example.saga.coordinator.domain;
+package org.example.saga.order.domain;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.saga.api.DebitCustomerRequest;
@@ -9,18 +9,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class Sender {
+public class JMSClient {
 
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void send(DebitCustomerRequest r) {
-        log.info("place-order-customer {}", r.getAction());
-        jmsTemplate.convertAndSend("place-order-customer", r.getAction());
-    }
-
     public void send(PlaceOrderRequest r) {
         log.info("place-order {}", r.getAction());
-        jmsTemplate.convertAndSend("place-order", r.getAction());
+        jmsTemplate.convertAndSend("place-order.response", r);
     }
 }

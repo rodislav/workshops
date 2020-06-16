@@ -1,4 +1,4 @@
-package org.example.saga.coordinator.domain;
+package org.example.saga.customer.config;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 @Configuration
-public class SenderConfig {
+public class JMSClientConfig {
 
     @Value("${artemis.broker-url}")
     private String brokerUrl;

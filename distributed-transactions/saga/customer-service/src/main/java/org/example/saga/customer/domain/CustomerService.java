@@ -32,6 +32,14 @@ public class CustomerService {
         return repository.save(customer);
     }
 
+    public void creditBudget(UUID customerId, Long amount) {
+        final var customer = findById(customerId)
+                .getOrElseThrow(() -> new CustomerNotFoundException(customerId));
+
+        customer.setBudget(customer.getBudget() + Math.abs(amount));
+        repository.save(customer);
+    }
+
     public Seq<Customer> findAll() {
         return repository.findAll();
     }
