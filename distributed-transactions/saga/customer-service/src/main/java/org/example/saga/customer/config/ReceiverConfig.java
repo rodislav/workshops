@@ -1,4 +1,4 @@
-package org.example.saga.customer;
+package org.example.saga.customer.config;
 
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
