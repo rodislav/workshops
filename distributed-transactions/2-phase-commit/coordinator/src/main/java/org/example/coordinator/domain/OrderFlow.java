@@ -39,11 +39,11 @@ class OrderFlow extends FlowWithEvents implements StreamObserver<PlaceStepRespon
         stepObserver.onNext(rpc);
     }
 
-    protected void doCommit(Pipe c) {
+    protected void doCommit() {
         stepObserver.onNext(getStep(COMMIT));
     }
 
-    public void doRollback(Pipe c) {
+    public void doRollback() {
         stepObserver.onNext(getStep(ROLLBACK));
     }
 
