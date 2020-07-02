@@ -10,11 +10,21 @@ Content-Type: application/json
 
 ###
 
-GET /customers
+GET /customers/5751f06c-4b07-492b-b097-628f9c4414d3
 Host: localhost:8080
 Content-Type: application/json
 
-###
+### FLAW
 
 GET /flaws/injection/customerId/' or '1'='1
+Host: localhost:8080
+
+### FIX
+
+GET /flaws/injection/customerId/fix/' or '1'='1
+Host: localhost:8080
+
+###
+
+GET /flaws/injection/customerId/fix/5751f06c-4b07-492b-b097-628f9c4414d3
 Host: localhost:8080

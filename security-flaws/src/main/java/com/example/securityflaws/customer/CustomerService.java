@@ -5,6 +5,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,9 +17,14 @@ public class CustomerService {
 
     private final CustomerRepository repository;
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate parameterJdbcTemplate;
 
-    public Option<Customer> findById(String customerId) {
+    public Option<Customer> findByIdJdbc(String customerId) {
         return repository.getById(customerId, jdbcTemplate);
+    }
+
+    public Option<Customer> findByIdParamJdbc(String customerId) {
+        return repository.getById(customerId, parameterJdbcTemplate);
     }
 
     public Option<Customer> findById(UUID customerId) {

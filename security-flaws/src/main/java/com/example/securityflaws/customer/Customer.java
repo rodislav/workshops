@@ -2,6 +2,7 @@ package com.example.securityflaws.customer;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,7 +22,9 @@ public class Customer {
     String lastName;
     LocalDateTime created;
     Long budget;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type = "uuid-char") // https://stackoverflow.com/a/42485612/1107450,
     private UUID id;
 }

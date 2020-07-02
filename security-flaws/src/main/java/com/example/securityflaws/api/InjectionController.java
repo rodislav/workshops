@@ -23,7 +23,14 @@ public class InjectionController {
      */
     @GetMapping("customerId/{id}")
     public CustomerDTO get(@PathVariable String id) {
-        return customerService.findById(id)
+        return customerService.findByIdJdbc(id)
+                .map(mapper::toDto)
+                .getOrElseThrow(() -> new NotFoundException(id));
+    }
+
+    @GetMapping("customerId/fix/{id}")
+    public CustomerDTO getFix(@PathVariable String id) {
+        return customerService.findByIdParamJdbc(id)
                 .map(mapper::toDto)
                 .getOrElseThrow(() -> new NotFoundException(id));
     }
