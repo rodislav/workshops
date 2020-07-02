@@ -15,10 +15,6 @@ public class OrderFacade {
     private final JMSClient jmsClient;
 
     public void startPlacingOrder(OrderDTO order) {
-        debitCustomer(order);
-    }
-
-    public void debitCustomer(OrderDTO order) {
         try {
             jmsClient.sendToCustomer(PlaceOrderStep.debitCustomer(order));
         } catch (Exception e) {
