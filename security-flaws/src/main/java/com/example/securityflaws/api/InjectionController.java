@@ -19,10 +19,9 @@ public class InjectionController {
     private final CustomerMapper mapper;
 
     /**
-     * GET /flaws/injection/' or '1'='1 HTTP/1.1
-     * Host: localhost:8080
+     * https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A1-Injection
      */
-    @GetMapping("{id}")
+    @GetMapping("customerId/{id}")
     public CustomerDTO get(@PathVariable String id) {
         return customerService.findById(id)
                 .map(mapper::toDto)

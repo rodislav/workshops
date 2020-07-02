@@ -16,5 +16,5 @@ Content-Type: application/json
 
 ###
 
-GET /flaws/injection/' or '1'='1
+GET /flaws/injection/customerId/' or '1'='1
 Host: localhost:8080
