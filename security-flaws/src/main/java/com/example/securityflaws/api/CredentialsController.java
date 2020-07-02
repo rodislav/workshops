@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
-@RequestMapping("/hello")
+@RequestMapping("/flaws/credentials")
 @RequiredArgsConstructor
-public class HelloController {
+public class CredentialsController {
 
     @RequestMapping(method = {POST, GET, DELETE, PUT})
     public String get() {

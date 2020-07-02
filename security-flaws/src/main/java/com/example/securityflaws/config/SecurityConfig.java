@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/customers").permitAll()
                 .antMatchers("/customers/**").permitAll()
                 .antMatchers("/flaws/injection/**").permitAll()
-                .anyRequest()
+                .antMatchers("/flaws/credentials")
                 .authenticated()
                 .and()
                 .httpBasic()
