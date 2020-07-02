@@ -1,0 +1,20 @@
+### Show what exactly is wrong, therefore expose information that can be used by the atacker
+
+### BAD USERNAME
+### see header Custom-Details: Bad username
+
+GET /hello
+Host: localhost:8080
+Authorization: Basic user1 password1
+
+### BAD PASSWORD
+### see header Custom-Details: Bad password
+GET /hello
+Host: localhost:8080
+Authorization: Basic user password1
+
+### OK
+
+GET /hello
+Host: localhost:8080
+Authorization: Basic user password

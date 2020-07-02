@@ -1,12 +1,24 @@
 package com.example.securityflaws.config;
 
+import com.example.securityflaws.security.BadPasswordException;
+import com.example.securityflaws.security.BadUserNameException;
+import com.example.securityflaws.security.FlawedAuthProvider;
+import com.example.securityflaws.security.MyBasicAuthFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -19,7 +31,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers("/customers").permitAll()
+                .antMatchers("/customers/**").permitAll()
+                .antMatchers("/flaws/injection/**").permitAll()
                 .anyRequest()
-                .permitAll();
+                .authenticated()
+                .and()
+                .httpBasic()
+                .and()
+                .addFilterBefore(new MyBasicAuthFilter(authenticationManager()), BasicAuthenticationFilter.class)
+        ;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(new FlawedAuthProvider());
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    }
+
+    @Bean
+    public DefaultAuthenticationEventPublisher defaultAuthenticationEventPublisher() {
+        final var publisher = new DefaultAuthenticationEventPublisher();
+
+        publisher.setAdditionalExceptionMappings(
+                Map.of(
+                        BadPasswordException.class, AuthenticationFailureBadCredentialsEvent.class,
+                        BadUserNameException.class, AuthenticationFailureBadCredentialsEvent.class)
+        );
+
+        return publisher;
     }
 }
