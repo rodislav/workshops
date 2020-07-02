@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ###
 
-GET /customers/5751f06c-4b07-492b-b097-628f9c4414d3
+GET /customers
 Host: localhost:8080
 Content-Type: application/json
 
@@ -26,5 +26,5 @@ Host: localhost:8080
 
 ###
 
-GET /flaws/injection/customerId/fix/5751f06c-4b07-492b-b097-628f9c4414d3
+GET /flaws/injection/customerId/fix/8fb78b55-3430-4f02-b988-67e49371efdf
 Host: localhost:8080
