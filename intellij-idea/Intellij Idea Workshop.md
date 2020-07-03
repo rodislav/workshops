@@ -285,4 +285,14 @@ Most of the settings described here are available on both levels
     - Can be applied to a folder
 1. **Edit:** `Shift + Enter` Start a new line under current one and move caret to it
 1. **Edit:** `Cmd + Enter` Split current line, move the content after the caret to a new line
+1. **Edit:** `F5` Refactor - copy class
+    - When file is selected in **Project** view or cursor is placed inside a name of a class (*incl. inner classes*)
+1. **Edit:** `F6` Refactor - move class
+    - When file is selected in **Project** view or cursor is placed inside a name of a class (*incl. inner classes*)
+1. **Edit:** `Shift + F6` Refactor - rename class name
+    - When a class is selected in **Project** view or cursor is placed inside a class name
+1. **Edit:** `Shift + F6` Refactor - rename the folder or package name
+    - When a folder or package is selected in **Project** view
+    - Option *Rename package*: will consider **all packages** with same name in **all modules** 
+    - Option *Rename folder*: will rename **only the current package** and will update `package` and all `imports` for the **current module**
 
