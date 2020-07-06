@@ -1,0 +1,17 @@
+### Extracting username from local file
+GET /flaws/xxe/extract
+Host: localhost:8080
+
+### Extracting the username is fixed
+GET /flaws/xxe/extract/safe
+Host: localhost:8080
+
+### Bomb consuming resources
+GET /flaws/xxe/xml-bomb
+Host: localhost:8080
+
+### Bomb is not consuming too much resources
+GET /flaws/xxe/xml-bomb/safe
+Host: localhost:8080
+
+###
