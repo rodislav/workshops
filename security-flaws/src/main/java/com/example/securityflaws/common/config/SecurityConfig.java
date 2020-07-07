@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/flaws/injection/**").permitAll()
 
                 .antMatchers("/flaws/sde").authenticated()
-                .antMatchers("/flaws/ba").authenticated()
                 .and()
                 .httpBasic()
                 .and()

