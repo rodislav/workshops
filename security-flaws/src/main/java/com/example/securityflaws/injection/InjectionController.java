@@ -1,8 +1,8 @@
-package com.example.securityflaws.api;
+package com.example.securityflaws.injection;
 
-import com.example.securityflaws.api.dto.CustomerDTO;
-import com.example.securityflaws.api.dto.CustomerMapper;
-import com.example.securityflaws.api.exception.NotFoundException;
+import com.example.securityflaws.common.api.dto.CustomerDTO;
+import com.example.securityflaws.common.api.dto.CustomerMapper;
+import com.example.securityflaws.common.api.exception.NotFoundException;
 import com.example.securityflaws.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

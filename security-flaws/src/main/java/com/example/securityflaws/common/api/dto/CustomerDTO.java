@@ -1,4 +1,4 @@
-package com.example.securityflaws.api.dto;
+package com.example.securityflaws.common.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,5 @@
-package com.example.securityflaws.security;
+package com.example.securityflaws.common.security;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 
 public class BadPasswordException extends

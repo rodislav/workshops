@@ -1,11 +1,10 @@
-package com.example.securityflaws.api;
+package com.example.securityflaws.customer;
 
 import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
-import com.example.securityflaws.api.dto.CustomerDTO;
-import com.example.securityflaws.api.dto.CustomerMapper;
-import com.example.securityflaws.api.exception.NotFoundException;
-import com.example.securityflaws.customer.CustomerService;
+import com.example.securityflaws.common.api.dto.CustomerDTO;
+import com.example.securityflaws.common.api.dto.CustomerMapper;
+import com.example.securityflaws.common.api.exception.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

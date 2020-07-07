@@ -1,4 +1,4 @@
-package com.example.securityflaws.security;
+package com.example.securityflaws.common.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

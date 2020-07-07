@@ -1,9 +1,9 @@
-package com.example.securityflaws.config;
+package com.example.securityflaws.common.config;
 
-import com.example.securityflaws.security.BadPasswordException;
-import com.example.securityflaws.security.BadUserNameException;
-import com.example.securityflaws.security.FlawedAuthProvider;
-import com.example.securityflaws.security.MyBasicAuthFilter;
+import com.example.securityflaws.common.security.BadPasswordException;
+import com.example.securityflaws.common.security.BadUserNameException;
+import com.example.securityflaws.common.security.FlawedAuthProvider;
+import com.example.securityflaws.common.security.MyBasicAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Map;

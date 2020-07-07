@@ -1,7 +1,5 @@
-package com.example.securityflaws.api.exception;
+package com.example.securityflaws.common.api.exception;
 
-import com.example.securityflaws.security.BadPasswordException;
-import com.example.securityflaws.security.BadUserNameException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

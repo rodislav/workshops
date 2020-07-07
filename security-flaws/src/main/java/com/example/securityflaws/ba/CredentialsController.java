@@ -1,4 +1,4 @@
-package com.example.securityflaws.api;
+package com.example.securityflaws.ba;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

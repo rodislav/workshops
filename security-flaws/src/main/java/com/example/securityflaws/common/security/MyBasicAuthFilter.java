@@ -1,4 +1,4 @@
-package com.example.securityflaws.security;
+package com.example.securityflaws.common.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;

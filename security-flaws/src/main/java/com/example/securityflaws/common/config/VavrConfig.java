@@ -1,4 +1,4 @@
-package com.example.securityflaws.config;
+package com.example.securityflaws.common.config;
 
 import com.fasterxml.jackson.databind.Module;
 import io.vavr.jackson.datatype.VavrModule;

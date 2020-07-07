@@ -1,4 +1,4 @@
-package com.example.securityflaws.api.exception;
+package com.example.securityflaws.common.api.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
