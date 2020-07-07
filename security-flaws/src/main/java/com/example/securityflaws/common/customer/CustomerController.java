@@ -22,13 +22,15 @@ public class CustomerController {
 
     @GetMapping
     public Seq<CustomerDTO> list() {
-        return customerService.findAll()
+        return customerService
+                .findAll()
                 .map(mapper::toDto);
     }
 
     @GetMapping("{id}")
     public CustomerDTO get(@PathVariable UUID id) {
-        return customerService.findById(id)
+        return customerService
+                .findById(id)
                 .map(mapper::toDto)
                 .getOrElseThrow(() -> new NotFoundException(id));
     }
@@ -36,7 +38,8 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO create(@RequestBody CustomerDTO dto, HttpServletResponse response) {
-        return customerService.createCustomer(mapper.toEntity(dto))
+        return customerService
+                .createCustomer(mapper.toEntity(dto))
                 .peek(c -> response.addHeader(HttpHeaders.LOCATION, "/customers/" + c.getId()))
                 .map(mapper::toDto)
                 .get();

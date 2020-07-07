@@ -16,9 +16,10 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 //https://www.baeldung.com/jackson-ignore-null-fields
 public class CustomerDTO {
+    UUID id;
     String firstName;
     String lastName;
+    String sensitiveData;
     LocalDateTime created;
     Long budget;
-    private UUID id;
 }

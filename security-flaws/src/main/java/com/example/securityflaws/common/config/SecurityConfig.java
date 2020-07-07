@@ -5,6 +5,8 @@ import com.example.securityflaws.common.security.BadUserNameException;
 import com.example.securityflaws.common.security.FlawedAuthProvider;
 import com.example.securityflaws.common.security.MyBasicAuthFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Map;
@@ -37,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/flaws/xxe/**").permitAll()
 
                 .antMatchers("/flaws/injection/**").permitAll()
+
+                .antMatchers("/flaws/sde").authenticated()
                 .antMatchers("/flaws/ba").authenticated()
                 .and()
                 .httpBasic()
@@ -55,16 +61,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
-    @Bean
-    public DefaultAuthenticationEventPublisher defaultAuthenticationEventPublisher() {
-        final var publisher = new DefaultAuthenticationEventPublisher();
-
-        publisher.setAdditionalExceptionMappings(
-                Map.of(
-                        BadPasswordException.class, AuthenticationFailureBadCredentialsEvent.class,
-                        BadUserNameException.class, AuthenticationFailureBadCredentialsEvent.class)
-        );
-
-        return publisher;
+    @Autowired
+    @SneakyThrows
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
+        auth.inMemoryAuthentication()
+                .withUser("user").password(passwordEncoder().encode("password"))
+                .authorities("ROLE_USER");
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

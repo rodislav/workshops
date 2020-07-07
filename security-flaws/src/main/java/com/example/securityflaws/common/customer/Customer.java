@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Customer {
     String firstName;
     String lastName;
+    String sensitiveData;
     LocalDateTime created;
     Long budget;
 
