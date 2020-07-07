@@ -32,9 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/customers").permitAll()
                 .antMatchers("/customers/**").permitAll()
+
+                .antMatchers("/flaws/xxe").permitAll()
+                .antMatchers("/flaws/xxe/**").permitAll()
+
                 .antMatchers("/flaws/injection/**").permitAll()
-                .antMatchers("/flaws/credentials")
-                .authenticated()
+                .antMatchers("/flaws/credentials").authenticated()
                 .and()
                 .httpBasic()
                 .and()
