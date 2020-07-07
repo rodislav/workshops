@@ -1,4 +1,4 @@
-package com.example.securityflaws.customer;
+package com.example.securityflaws.common.customer;
 
 import lombok.*;
 import lombok.experimental.Accessors;

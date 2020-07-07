@@ -1,4 +1,4 @@
-package com.example.securityflaws.customer;
+package com.example.securityflaws.common.customer;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

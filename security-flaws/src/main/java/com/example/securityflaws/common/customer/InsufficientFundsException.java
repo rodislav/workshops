@@ -1,4 +1,4 @@
-package com.example.securityflaws.customer;
+package com.example.securityflaws.common.customer;
 
 public class InsufficientFundsException extends RuntimeException {
 

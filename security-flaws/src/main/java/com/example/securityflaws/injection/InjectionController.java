@@ -3,7 +3,7 @@ package com.example.securityflaws.injection;
 import com.example.securityflaws.common.api.dto.CustomerDTO;
 import com.example.securityflaws.common.api.dto.CustomerMapper;
 import com.example.securityflaws.common.api.exception.NotFoundException;
-import com.example.securityflaws.customer.CustomerService;
+import com.example.securityflaws.common.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,6 +1,6 @@
 package com.example.securityflaws.common.api.dto;
 
-import com.example.securityflaws.customer.Customer;
+import com.example.securityflaws.common.customer.Customer;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
