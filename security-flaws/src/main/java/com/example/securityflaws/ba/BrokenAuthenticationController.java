@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
-@RequestMapping("/flaws/credentials")
+@RequestMapping("/flaws/ba")
 @RequiredArgsConstructor
-public class CredentialsController {
+public class BrokenAuthenticationController {
 
     @RequestMapping(method = {POST, GET, DELETE, PUT})
     public String get() {

@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/flaws/xxe/**").permitAll()
 
                 .antMatchers("/flaws/injection/**").permitAll()
-                .antMatchers("/flaws/credentials").authenticated()
+                .antMatchers("/flaws/ba").authenticated()
                 .and()
                 .httpBasic()
                 .and()
