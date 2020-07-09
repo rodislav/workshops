@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/flaws/injection/**").permitAll()
 
-                .antMatchers("/flaws/sde").authenticated()
+                .antMatchers("/flaws/sde/**").authenticated()
                 .and()
                 .httpBasic()
                 .and()
@@ -59,18 +59,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
-
-    @Autowired
-    @SneakyThrows
-    public void configureGlobal(AuthenticationManagerBuilder auth) {
-        auth.inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("password"))
-                .authorities("ROLE_USER");
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

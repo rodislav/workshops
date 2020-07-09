@@ -7,7 +7,8 @@ Content-Type: application/json
 Authorization: Basic user password
 
 {
-  "name" : "rodi"
+  "firstName" : "rodi",
+  "lastName" : "m"
 }
 
 ### injection FLAW will not pass basic auth, we still need to be authenticated
